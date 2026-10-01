@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const navLinks = [
-  { href: "/projects", label: "WORK" },
+  { href: "/work", label: "WORK" },
   { href: "/about", label: "ABOUT" },
   { href: "/contact", label: "CONTACT" },
   {

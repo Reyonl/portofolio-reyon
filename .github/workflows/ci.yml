@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Content-integrity gate runs on Node directly (no Next needed):
+      # if evidence loses its source or a private repo gets a public link, this fails.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Content integrity tests
+        run: node --test "test/content.test.ts" "test/content-gate.test.ts"
+
+      - name: Production build
+        run: npm run build

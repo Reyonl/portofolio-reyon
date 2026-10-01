@@ -1,11 +1,11 @@
 import Link from "next/link";
-import Image from "next/image";
-import { getFeaturedProjects } from "@/data/projects";
+import { featuredProjects } from "@/lib/projects";
+import { statusLabel } from "@/lib/projects";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 export default function FeaturedProjects() {
-  const featured = getFeaturedProjects();
+  const featured = featuredProjects();
 
   return (
     <section
@@ -26,66 +26,52 @@ export default function FeaturedProjects() {
           {featured.map((project, index) => (
             <ScrollReveal key={project.slug} delay={index * 0.05}>
               <Link
-                href={`/projects/${project.slug}`}
+                href={`/work/${project.slug}`}
                 className="group block border border-[#222222] overflow-hidden hover:border-[#C9B99A]/20 transition-all duration-500"
-                aria-label={`${project.title} — ${project.description}`}
+                aria-label={`${project.title} — ${project.summary}`}
               >
-                <div className="grid grid-cols-1 lg:grid-cols-2">
-                  {/* Image */}
-                  <div className="relative h-60 lg:min-h-[360px] overflow-hidden bg-[#0D0D0D]">
-                    {project.coverImage && (
-                      <Image
-                        src={project.coverImage}
-                        alt={`${project.title} cover`}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 50vw"
-                        className="object-cover opacity-40 group-hover:opacity-60 group-hover:scale-[1.03] transition-all duration-700 ease-out"
-                      />
-                    )}
-                    {/* Grid overlay on hover */}
-                    <div
-                      className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                      aria-hidden="true"
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(#C9B99A08 1px, transparent 1px), linear-gradient(90deg, #C9B99A08 1px, transparent 1px)",
-                        backgroundSize: "48px 48px",
-                      }}
-                    />
-                    {/* Flagship badge */}
-                    {project.featured && (
-                      <div className="absolute top-5 left-5">
-                        <span className="accent-label bg-[#080808]/80 px-2.5 py-1.5 backdrop-blur-sm">
-                          FLAGSHIP PROJECT
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr]">
+                  {/* Identity panel (replaces cover image; visual rebuild in P3) */}
+                  <div className="relative min-h-[220px] bg-[#0D0D0D] p-8 lg:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#222222]">
+                    <div>
+                      {project.featured && (
+                        <span className="accent-label">FLAGSHIP PROJECT</span>
+                      )}
+                      <h3 className="font-display text-[clamp(2.25rem,4.5vw,3.5rem)] text-[#F2F2F0] leading-none mt-6 group-hover:text-[#E8E2D5] transition-colors duration-300">
+                        {project.title}
+                      </h3>
+                      <p className="meta-label text-[#888888] mt-3">{project.category}</p>
+                    </div>
+
+                    {/* Evidence chips — verifiable claims only */}
+                    <div className="flex flex-wrap gap-2 mt-8">
+                      {project.evidence.slice(0, 3).map((e) => (
+                        <span
+                          key={e.label}
+                          className="font-mono text-[10px] tracking-[0.08em] text-[#C9B99A]/80 border border-[#222222] px-2.5 py-1.5 bg-[#080808]"
+                        >
+                          {e.value.length > 28 ? `${e.value.slice(0, 28)}…` : e.value}
                         </span>
-                      </div>
-                    )}
+                      ))}
+                    </div>
                   </div>
 
                   {/* Content */}
                   <div className="p-8 lg:p-12 flex flex-col justify-between bg-[#0D0D0D] group-hover:bg-[#111111] transition-colors duration-500">
                     <div>
-                      {/* Index + year */}
+                      {/* Index + status */}
                       <div className="flex items-center justify-between mb-8">
                         <span className="meta-label">
-                          PROJECT / 0{index + 1}
+                          PROJECT / 0{index + 1} · {project.period}
                         </span>
-                        <div className="flex items-center gap-2">
-                          <span className="status-dot" />
-                          <span className="meta-label text-[#C9B99A]">
-                            {project.status === "completed"
-                              ? "SHIPPED"
-                              : "IN PROGRESS"}
-                          </span>
-                        </div>
+                        <span className="meta-label flex items-center gap-2 text-[#C9B99A]">
+                          <span className="status-dot" aria-hidden="true" />
+                          {statusLabel(project.status)}
+                        </span>
                       </div>
 
-                      {/* Title */}
-                      <h3 className="font-display text-[clamp(2.25rem,4.5vw,3.5rem)] text-[#F2F2F0] leading-none mb-3 group-hover:text-[#E8E2D5] transition-colors duration-300">
-                        {project.title}
-                      </h3>
                       <p className="meta-label text-[#888888] tracking-widest mb-2">
-                        {project.description}
+                        {project.summary}
                       </p>
 
                       {/* Role */}
@@ -100,7 +86,7 @@ export default function FeaturedProjects() {
                       <div className="space-y-1 mb-8">
                         <p className="meta-label">STACK</p>
                         <p className="font-mono text-xs text-[#555555] leading-relaxed">
-                          {project.technologies.join(" · ")}
+                          {project.stack.join(" · ")}
                         </p>
                       </div>
                     </div>
@@ -114,7 +100,7 @@ export default function FeaturedProjects() {
                         →
                       </span>
                       <div className="flex-1 h-px bg-[#222222] group-hover:bg-[#C9B99A]/20 transition-colors duration-300" />
-                      {project.repositoryUrl && (
+                      {project.links.repo && (
                         <span className="text-[#555555]">VIEW SOURCE ↗</span>
                       )}
                     </div>

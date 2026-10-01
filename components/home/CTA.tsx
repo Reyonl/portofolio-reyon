@@ -50,7 +50,7 @@ export default function CTA() {
               </span>
             </Link>
             <Link
-              href="/projects"
+              href="/work"
               id="cta-work"
               className="inline-flex items-center gap-3 px-8 py-3.5 border border-[#222222] text-[#555555] font-mono text-[11px] tracking-[0.15em] uppercase transition-all duration-300 hover:border-[#C9B99A]/30 hover:text-[#C9B99A]"
             >

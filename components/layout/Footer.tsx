@@ -24,7 +24,7 @@ export default function Footer() {
             <p className="meta-label mb-5">Navigation</p>
             <nav className="flex flex-col gap-3" aria-label="Footer navigation">
               {[
-                { href: "/projects", label: "WORK" },
+                { href: "/work", label: "WORK" },
                 { href: "/about", label: "ABOUT" },
                 { href: "/contact", label: "CONTACT" },
               ].map((link) => (

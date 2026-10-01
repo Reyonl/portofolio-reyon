@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { getFeaturedProjects } from "@/data/projects";
+import { featuredProjects } from "@/lib/projects";
 
 export default function Hero() {
   const prefersReduced = useReducedMotion();
@@ -16,7 +16,7 @@ export default function Hero() {
   const opacityBg = useTransform(scrollY, [0, 500], [1, 0.3]);
   const yContent = useTransform(scrollY, [0, 400], [0, prefersReduced ? 0 : 30]);
 
-  const featured = getFeaturedProjects()[0];
+  const featured = featuredProjects()[0];
 
   const nameWords = ["REYON", "LAU", "JIEMIN"];
 
@@ -152,7 +152,7 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.85 }}
               >
                 <Link
-                  href="/projects"
+                  href="/work"
                   id="hero-cta-work"
                   className="group inline-flex items-center gap-3 px-7 py-3 bg-[#F2F2F0] text-[#080808] font-mono text-[11px] tracking-[0.15em] uppercase transition-all duration-300 hover:bg-[#C9B99A] hover:gap-5"
                 >
@@ -192,13 +192,13 @@ export default function Hero() {
                   <p className="font-mono text-[11px] text-[#F2F2F0] tracking-[0.12em] mb-1">
                     {featured.title}
                   </p>
-                  <p className="meta-label">{featured.description}</p>
+                  <p className="meta-label">{featured.summary}</p>
                 </div>
                 <div className="sm:border-l sm:border-[#222222] sm:pl-8 space-y-1">
                   <p className="meta-label">
                     STACK&nbsp;&nbsp;
                     <span className="text-[#888888]">
-                      {featured.technologies.slice(0, 3).join(" · ")}
+                      {featured.stack.slice(0, 3).join(" · ")}
                     </span>
                   </p>
                   <p className="meta-label flex items-center gap-1.5">

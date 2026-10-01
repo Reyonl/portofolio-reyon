@@ -3,6 +3,7 @@ import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -72,7 +73,8 @@ export default function RootLayout({
     >
       <body>
         <Nav />
-        <main>{children}</main>
+        <ScrollProgress />
+        <main id="main">{children}</main>
         <Footer />
       </body>
     </html>

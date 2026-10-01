@@ -10,9 +10,9 @@
   --color-subtle:   #555555;
   --color-accent:   #C9B99A;
 
-  --font-display: "Instrument Serif", "Georgia", serif;
-  --font-sans:    "Inter", system-ui, sans-serif;
-  --font-mono:    "JetBrains Mono", "Fira Code", monospace;
+  --font-display: var(--font-instrument), "Georgia", serif;
+  --font-sans:    var(--font-inter), system-ui, sans-serif;
+  --font-mono:    var(--font-mono-var), "Fira Code", monospace;
 }
 
 /* ─── Reset & Base ───────────────────────────────────────────── */
@@ -192,4 +192,51 @@ body::before {
   border-left: 3px solid transparent;
   border-right: 3px solid transparent;
   border-top: 5px solid #222222;
+}
+
+/* ─── Motion — CSS-first, functional only ───────────────────── */
+
+/* Scroll reveal: ScrollReveal.tsx toggles data-visible; no library. */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.reveal[data-visible="1"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero entry sequence: one-time editorial fade-up, staggered by line. */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero-seq {
+  animation: hero-rise 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.hero-seq > :nth-child(2) { animation-delay: 0.1s; }
+
+/* Mobile menu fade */
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.motion-fade { animation: fade-in 0.2s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero-seq,
+  .motion-fade {
+    animation: none;
+  }
+  html[data-scroll-behavior="smooth"] { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

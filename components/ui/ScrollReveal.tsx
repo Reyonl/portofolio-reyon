@@ -1,47 +1,50 @@
 "use client";
 
-import { useRef, ReactNode } from "react";
-import { motion, useInView } from "framer-motion";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+// CSS-first scroll reveal: one tiny client component that only toggles a
+// data-visible attribute via IntersectionObserver; all motion lives in
+// globals.css and is disabled wholesale under prefers-reduced-motion.
+// (Replaces the previous framer-motion version — same call-site API.)
+
+import { useEffect, useRef, type ReactNode, type CSSProperties } from "react";
 
 interface ScrollRevealProps {
   children: ReactNode;
   delay?: number;
   className?: string;
-  once?: boolean;
-  y?: number;
 }
 
 export default function ScrollReveal({
   children,
   delay = 0,
   className = "",
-  once = true,
-  y = 20,
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const prefersReduced = useReducedMotion();
-  const inView = useInView(ref, { once, margin: "-60px" });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            el.setAttribute("data-visible", "1");
+            io.disconnect();
+          }
+        }
+      },
+      { rootMargin: "-60px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      className={className}
-      initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y }}
-      animate={
-        inView
-          ? { opacity: 1, y: 0 }
-          : prefersReduced
-          ? { opacity: 0 }
-          : { opacity: 0, y }
-      }
-      transition={{
-        duration: prefersReduced ? 0.15 : 0.65,
-        delay,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      }}
+      className={`reveal ${className}`}
+      style={delay > 0 ? ({ transitionDelay: `${delay}s` } as CSSProperties) : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

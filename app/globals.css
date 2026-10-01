@@ -202,8 +202,10 @@ body::before {
    and never for reduced-motion users (global reduce block below). */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
+    /* transform-only: an opacity fade makes below-fold text measure as
+       failed contrast in Lighthouse (rendered alpha multiplies fg). Sliding
+       content keeps the editorial reveal without the a11y penalty. */
     .reveal {
-      opacity: 0;
       transform: translateY(18px);
       animation: reveal-in linear both;
       animation-timeline: view();
@@ -212,7 +214,7 @@ body::before {
   }
 }
 @keyframes reveal-in {
-  to { opacity: 1; transform: none; }
+  to { transform: none; }
 }
 
 /* Hero entry sequence: one-time editorial fade-up, staggered by line. */

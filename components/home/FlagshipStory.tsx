@@ -34,7 +34,7 @@ export default function FlagshipStory() {
               {flagship.evidence.slice(0, 4).map((e) => (
                 <div key={e.label}>
                   <p className="font-mono text-[11px] text-[#F2F2F0]">{e.value.length > 46 ? `${e.value.slice(0, 46)}…` : e.value}</p>
-                  <p className="meta-label mt-1 opacity-60">{e.label}</p>
+                  <p className="meta-label mt-1">{e.label}</p>
                 </div>
               ))}
             </div>
@@ -61,13 +61,13 @@ export default function FlagshipStory() {
                       <p className={`font-mono text-[11px] tracking-[0.12em] ${node.highlight ? "text-[#C9B99A]" : "text-[#F2F2F0]"}`}>
                         {node.label}
                       </p>
-                      {node.sublabel && <p className="meta-label mt-1 opacity-60">{node.sublabel}</p>}
+                      {node.sublabel && <p className="meta-label mt-1">{node.sublabel}</p>}
                     </div>
                     {i < nodes.length - 1 && <div className="arch-arrow" aria-hidden="true" />}
                   </div>
                 ))}
               </div>
-              <p className="meta-label mt-8 leading-relaxed opacity-70">
+              <p className="meta-label mt-8 leading-relaxed">
                 Every mutation passes the gate; every pass is re-read
                 before it is believed.
               </p>

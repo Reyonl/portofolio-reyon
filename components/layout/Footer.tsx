@@ -16,7 +16,7 @@ export default function Footer() {
               Software Engineer · Web Application Developer
             </p>
             {/* Very subtle One Piece easter egg */}
-            <p className="meta-label mt-6 opacity-30">The sea is still wide.</p>
+            <p className="meta-label mt-6">The sea is still wide.</p>
           </div>
 
           {/* Navigation */}
@@ -64,7 +64,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-[#222222] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <p className="meta-label">© {year} Reyon Lau Jiemin</p>
-          <p className="meta-label opacity-40">Built with Next.js · TypeScript</p>
+          <p className="meta-label">Built with Next.js · TypeScript</p>
         </div>
       </div>
     </footer>

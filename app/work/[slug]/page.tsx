@@ -47,7 +47,7 @@ function CaseSection({
       <div className="flex items-center gap-4 mb-8">
         <span className="accent-label">{index}</span>
         <div className="flex-1 h-px bg-[#222222]" aria-hidden="true" />
-        <span className="meta-label">{label}</span>
+        <h2 className="meta-label m-0">{label}</h2>
       </div>
       {children}
     </section>
@@ -171,7 +171,7 @@ export default async function WorkDetailPage({ params }: Props) {
                           <p className={`font-mono text-[11px] tracking-[0.1em] ${node.highlight ? "text-[#C9B99A]" : "text-[#888888]"}`}>
                             {node.label}
                           </p>
-                          {node.sublabel && <p className="meta-label mt-0.5 opacity-50">{node.sublabel}</p>}
+                          {node.sublabel && <p className="meta-label mt-0.5">{node.sublabel}</p>}
                         </div>
                         {i < project.architectureNodes!.length - 1 && <div className="arch-arrow" aria-hidden="true" />}
                       </div>
@@ -285,11 +285,11 @@ export default async function WorkDetailPage({ params }: Props) {
                     Live site ↗
                   </a>
                 ) : (
-                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#888888] opacity-40">
+                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#888888]">
                     No live deployment
                   </p>
                 )}
-                <p className="meta-label pt-3 border-t border-[#111111] opacity-60">
+                <p className="meta-label pt-3 border-t border-[#111111]">
                   Status: {statusLabel(project.status)}
                 </p>
               </div>

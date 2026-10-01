@@ -46,7 +46,7 @@ export default function AboutPage() {
               <div className="border border-[#222222] bg-[#0D0D0D] p-8">
                 <p className="meta-label mb-5">BACKGROUND</p>
                 <p className="text-[#F2F2F0] mb-2">{profile.background}</p>
-                <p className="meta-label opacity-60">
+                <p className="meta-label">
                   Informatics Engineering — Bachelor&apos;s degree.
                 </p>
               </div>
@@ -124,7 +124,7 @@ export default function AboutPage() {
                             {wp.principle}
                           </Link>
                         </p>
-                        <p className="meta-label opacity-50">{wp.projectLabel}</p>
+                        <p className="meta-label">{wp.projectLabel}</p>
                       </div>
                     </li>
                   ))}
@@ -160,7 +160,7 @@ export default function AboutPage() {
             {tools.map((t) => (
               <div key={t.name} className="flex items-baseline justify-between gap-4 border-b border-[#111111] pb-2">
                 <dt className="font-mono text-[11px] text-[#F2F2F0] tracking-[0.06em]">{t.name}</dt>
-                <dd className="meta-label text-right opacity-60 leading-snug">{t.reason}</dd>
+                <dd className="meta-label text-right leading-snug">{t.reason}</dd>
               </div>
             ))}
           </dl>

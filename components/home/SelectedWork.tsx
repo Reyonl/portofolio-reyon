@@ -34,7 +34,6 @@ export default function SelectedWork() {
               <Link
                 href={`/work/${project.slug}`}
                 className="group grid grid-cols-1 md:grid-cols-[64px_1fr_260px] gap-y-4 md:gap-x-10 items-baseline border-b border-[#222222] py-10 md:py-12 transition-colors duration-300 hover:bg-[#0D0D0D]"
-                aria-label={`${project.title} — view case study`}
               >
                 <span className="section-index md:pl-2" aria-hidden="true">
                   {String(i + 1).padStart(2, "0")}
@@ -58,7 +57,7 @@ export default function SelectedWork() {
                       <p className="font-mono text-[11px] text-[#F2F2F0] tracking-[0.04em] leading-snug">
                         {e.value.length > 52 ? `${e.value.slice(0, 52)}…` : e.value}
                       </p>
-                      <p className="meta-label mt-1 opacity-60">{e.label}</p>
+                      <p className="meta-label mt-1">{e.label}</p>
                     </div>
                   ))}
                   <p className="meta-label mt-0 md:mt-1 flex items-center gap-2 text-[#C9B99A]/70">

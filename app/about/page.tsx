@@ -31,10 +31,10 @@ export default function AboutPage() {
         {/* Statement */}
         <ScrollReveal className="mb-24">
           <p className="accent-label mb-5">ABOUT</p>
-          <h1 className="font-display text-[clamp(2.5rem,6.5vw,5rem)] leading-[1.02] text-[#F2F2F0] max-w-4xl mb-10">
+          <h1 className="font-display text-[clamp(2.5rem,6.5vw,5rem)] leading-[1.02] text-[#F5F7FA] max-w-4xl mb-10">
             {profile.name}
           </h1>
-          <p className="text-[clamp(1.15rem,2.2vw,1.45rem)] font-display text-[#888888] leading-relaxed max-w-2xl">
+          <p className="text-[clamp(1.15rem,2.2vw,1.45rem)] font-display text-[#9AA1AD] leading-relaxed max-w-2xl">
             {profile.positioningLines.join(" ")}
           </p>
         </ScrollReveal>
@@ -43,9 +43,9 @@ export default function AboutPage() {
           {/* Left: facts */}
           <div className="space-y-12">
             <ScrollReveal>
-              <div className="border border-[#222222] bg-[#0D0D0D] p-8">
+              <div className="border border-[#2A2E37] bg-[#101217] p-8">
                 <p className="meta-label mb-5">BACKGROUND</p>
-                <p className="text-[#F2F2F0] mb-2">{profile.background}</p>
+                <p className="text-[#F5F7FA] mb-2">{profile.background}</p>
                 <p className="meta-label">
                   Informatics Engineering — Bachelor&apos;s degree.
                 </p>
@@ -58,8 +58,8 @@ export default function AboutPage() {
                 <ul className="space-y-2.5 list-none">
                   {profile.focus.map((f) => (
                     <li key={f} className="flex items-center gap-3">
-                      <span className="w-1 h-1 bg-[#C9B99A] shrink-0" aria-hidden="true" />
-                      <span className="font-mono text-[11px] tracking-[0.06em] text-[#888888] uppercase">
+                      <span className="w-1 h-1 bg-[#63B3FF] shrink-0" aria-hidden="true" />
+                      <span className="font-mono text-[11px] tracking-[0.06em] text-[#9AA1AD] uppercase">
                         {f}
                       </span>
                     </li>
@@ -76,13 +76,13 @@ export default function AboutPage() {
                     href={profile.links.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#888888] hover:text-[#C9B99A] transition-colors hover-line w-fit"
+                    className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#9AA1AD] hover:text-[#63B3FF] transition-colors hover-line w-fit"
                   >
                     GitHub /{profile.links.githubHandle} ↗
                   </a>
                   <a
                     href={`mailto:${profile.links.email}`}
-                    className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#888888] hover:text-[#C9B99A] transition-colors hover-line w-fit"
+                    className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#9AA1AD] hover:text-[#63B3FF] transition-colors hover-line w-fit"
                   >
                     {profile.links.email} ↗
                   </a>
@@ -94,7 +94,7 @@ export default function AboutPage() {
           {/* Right: narrative + principles + timeline */}
           <div className="space-y-20">
             <ScrollReveal>
-              <p className="text-[#888888] leading-relaxed max-w-prose">
+              <p className="text-[#9AA1AD] leading-relaxed max-w-prose">
                 I work at the point where software actually has to run: a CLI
                 that must refuse to lie about a build, an editor that must
                 survive a phone screen, a receipt that must come out of a
@@ -103,7 +103,7 @@ export default function AboutPage() {
                 and grew into systems with CI, releases, and audit trails
                 because that&apos;s what &quot;finished&quot; means to me.
               </p>
-              <p className="text-[#888888] leading-relaxed max-w-prose mt-5">
+              <p className="text-[#9AA1AD] leading-relaxed max-w-prose mt-5">
                 AI-assisted development is how I work: agents and automation
                 accelerate implementation, while design, verification, and
                 judgment stay mine. Every project in this portfolio lists the
@@ -114,13 +114,13 @@ export default function AboutPage() {
             <ScrollReveal delay={0.05}>
               <div>
                 <p className="meta-label mb-6">WORKING PRINCIPLES</p>
-                <ol className="divide-y divide-[#111111] border-y border-[#111111] list-none">
+                <ol className="divide-y divide-[#171A21] border-y border-[#171A21] list-none">
                   {workPrinciples.map((wp) => (
                     <li key={wp.label} className="py-5 grid grid-cols-[40px_1fr] gap-4 items-baseline">
                       <span className="section-index">{wp.label}</span>
                       <div>
-                        <p className="text-[#F2F2F0] text-sm mb-1">
-                          <Link href={`/work/${wp.projectSlug}`} className="hover:text-[#C9B99A] transition-colors">
+                        <p className="text-[#F5F7FA] text-sm mb-1">
+                          <Link href={`/work/${wp.projectSlug}`} className="hover:text-[#63B3FF] transition-colors">
                             {wp.principle}
                           </Link>
                         </p>
@@ -135,16 +135,16 @@ export default function AboutPage() {
             <ScrollReveal delay={0.08}>
               <div>
                 <p className="meta-label mb-6">TRAJECTORY</p>
-                <ol className="border-l border-[#222222] ml-2 list-none">
+                <ol className="border-l border-[#2A2E37] ml-2 list-none">
                   {milestones.map((m) => (
                     <li key={m.title} className="relative pl-8 pb-8 last:pb-0">
-                      <span className="absolute -left-[5px] top-1.5 w-[9px] h-[9px] border border-[#C9B99A]/40 bg-[#080808]" aria-hidden="true" />
+                      <span className="absolute -left-[5px] top-1.5 w-[9px] h-[9px] border border-[#63B3FF]/40 bg-[#08090C]" aria-hidden="true" />
                       <p className="meta-label mb-1.5">
-                        <span className="text-[#888888]">{m.period}</span>
-                        <span className="text-[#C9B99A]"> · {m.label}</span>
+                        <span className="text-[#9AA1AD]">{m.period}</span>
+                        <span className="text-[#63B3FF]"> · {m.label}</span>
                       </p>
-                      <p className="text-[#F2F2F0] text-sm mb-1.5 leading-snug">{m.title}</p>
-                      <p className="text-[#888888] text-xs leading-relaxed max-w-md">{m.description}</p>
+                      <p className="text-[#F5F7FA] text-sm mb-1.5 leading-snug">{m.title}</p>
+                      <p className="text-[#9AA1AD] text-xs leading-relaxed max-w-md">{m.description}</p>
                     </li>
                   ))}
                 </ol>
@@ -154,12 +154,12 @@ export default function AboutPage() {
         </div>
 
         {/* Tools with reasons — replaces a logo wall */}
-        <ScrollReveal className="mt-24 pt-12 border-t border-[#222222]">
+        <ScrollReveal className="mt-24 pt-12 border-t border-[#2A2E37]">
           <p className="meta-label mb-6">TOOLS, AND WHY</p>
           <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-5">
             {tools.map((t) => (
-              <div key={t.name} className="flex items-baseline justify-between gap-4 border-b border-[#111111] pb-2">
-                <dt className="font-mono text-[11px] text-[#F2F2F0] tracking-[0.06em]">{t.name}</dt>
+              <div key={t.name} className="flex items-baseline justify-between gap-4 border-b border-[#171A21] pb-2">
+                <dt className="font-mono text-[11px] text-[#F5F7FA] tracking-[0.06em]">{t.name}</dt>
                 <dd className="meta-label text-right leading-snug">{t.reason}</dd>
               </div>
             ))}
@@ -168,10 +168,10 @@ export default function AboutPage() {
 
         <ScrollReveal delay={0.05}>
           <div className="mt-20 flex gap-10 flex-wrap">
-            <Link href="/work" className="meta-label text-[#C9B99A] hover-line">
+            <Link href="/work" className="meta-label text-[#63B3FF] hover-line">
               SELECTED WORK →
             </Link>
-            <Link href="/contact" className="meta-label text-[#888888] hover:text-[#C9B99A] transition-colors hover-line">
+            <Link href="/contact" className="meta-label text-[#9AA1AD] hover:text-[#63B3FF] transition-colors hover-line">
               CONTACT →
             </Link>
           </div>

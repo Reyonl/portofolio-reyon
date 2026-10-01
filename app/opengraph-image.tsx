@@ -14,7 +14,7 @@ export default function OpengraphImage() {
         style={{
           width: "100%",
           height: "100%",
-          backgroundColor: "#080808",
+          backgroundColor: "#08090C",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -22,7 +22,7 @@ export default function OpengraphImage() {
           fontFamily: "monospace",
         }}
       >
-        <div style={{ display: "flex", fontSize: 20, letterSpacing: 6, color: "#888888" }}>
+        <div style={{ display: "flex", fontSize: 20, letterSpacing: 6, color: "#9AA1AD" }}>
           PORTFOLIO — 2026
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -32,8 +32,8 @@ export default function OpengraphImage() {
               flexDirection: "column",
               fontSize: 96,
               lineHeight: 1.0,
-              color: "#F2F2F0",
-              fontFamily: "serif",
+              color: "#F5F7FA",
+              fontFamily: "sans-serif",
             }}
           >
             <div>REYON</div>
@@ -45,7 +45,7 @@ export default function OpengraphImage() {
               marginTop: 36,
               fontSize: 24,
               letterSpacing: 4,
-              color: "#C9B99A",
+              color: "#63B3FF",
             }}
           >
             SOFTWARE ENGINEER
@@ -55,11 +55,11 @@ export default function OpengraphImage() {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            borderTop: "1px solid #222222",
+            borderTop: "1px solid #2A2E37",
             paddingTop: 28,
             fontSize: 18,
             letterSpacing: 2,
-            color: "#888888",
+            color: "#9AA1AD",
           }}
         >
           <div>WEB · MOBILE · DEVELOPER AUTOMATION</div>

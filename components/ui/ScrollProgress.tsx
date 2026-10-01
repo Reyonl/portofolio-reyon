@@ -37,7 +37,7 @@ export default function ScrollProgress() {
     <div className="fixed top-0 left-0 right-0 z-[60] h-px pointer-events-none" aria-hidden="true">
       <div
         ref={bar}
-        className="h-full bg-[#C9B99A] origin-left scale-x-0 opacity-0 transition-[opacity] duration-300"
+        className="h-full bg-[#63B3FF] origin-left scale-x-0 opacity-0 transition-[opacity] duration-300"
       />
     </div>
   );

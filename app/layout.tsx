@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
@@ -14,10 +14,10 @@ const inter = Inter({
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-instrument",
-  weight: "400",
+  variable: "--font-grotesk",
+  weight: ["500", "700"],
   display: "swap",
 });
 
@@ -77,7 +77,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${instrumentSerif.variable} ${jetBrainsMono.variable}`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
     >
       <body>
         <script

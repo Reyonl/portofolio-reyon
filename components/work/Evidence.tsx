@@ -14,7 +14,7 @@ export function RepoLink({ project }: { project: Project }) {
         href={repo}
         target="_blank"
         rel="noopener noreferrer"
-        className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#555555] hover:text-[#C9B99A] transition-colors duration-200 hover-line w-fit"
+        className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#888888] hover:text-[#C9B99A] transition-colors duration-200 hover-line w-fit"
       >
         REPOSITORY ↗
       </a>
@@ -22,7 +22,7 @@ export function RepoLink({ project }: { project: Project }) {
   }
   if (repoVisibility === "private") {
     return (
-      <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#555555]">
+      <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#888888]">
         Private repository
       </p>
     );
@@ -53,7 +53,7 @@ export function EvidenceList({
             <p className="text-sm text-[#F2F2F0] leading-snug mt-0.5">{e.value}</p>
           </div>
           <p
-            className="font-mono text-[10px] leading-snug text-[#555555] sm:text-right sm:max-w-[45%] shrink-0 mt-1 sm:mt-0"
+            className="font-mono text-[10px] leading-snug text-[#888888] sm:text-right sm:max-w-[45%] shrink-0 mt-1 sm:mt-0"
             title={e.source}
           >
             {e.source}

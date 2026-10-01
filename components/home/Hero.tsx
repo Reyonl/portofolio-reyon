@@ -41,7 +41,7 @@ export default function Hero() {
                 REYON
               </span>
               <span className="block text-[clamp(4.25rem,12vw,10rem)] text-[#F2F2F0]" aria-hidden="true">
-                LAU <span className="text-[#555555]">JIEMIN</span>
+                LAU <span className="text-[#888888]">JIEMIN</span>
               </span>
             </h1>
 
@@ -89,7 +89,7 @@ export default function Hero() {
             </p>
             <Link
               href={`/work/${current.slug}`}
-              className="meta-label text-[#555555] hover:text-[#C9B99A] transition-colors sm:border-l sm:border-[#222222] sm:pl-10 hover-line"
+              className="meta-label text-[#888888] hover:text-[#C9B99A] transition-colors sm:border-l sm:border-[#222222] sm:pl-10 hover-line"
             >
               READ THE CASE STUDY →
             </Link>

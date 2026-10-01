@@ -26,7 +26,7 @@ export default function HowIWork() {
                 <span className="section-index">{wp.label}</span>
                 <Link
                   href={`/work/${wp.projectSlug}`}
-                  className="meta-label text-[#555555] hover:text-[#C9B99A] transition-colors hover-line"
+                  className="meta-label text-[#888888] hover:text-[#C9B99A] transition-colors hover-line"
                 >
                   {wp.projectLabel} →
                 </Link>

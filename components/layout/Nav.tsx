@@ -74,11 +74,11 @@ export default function Nav() {
                   className={`font-mono text-[11px] tracking-[0.18em] transition-colors duration-200 hover-line ${
                     !link.external && pathname.startsWith(link.href)
                       ? "text-[#C9B99A]"
-                      : "text-[#555555] hover:text-[#F2F2F0]"
+                      : "text-[#888888] hover:text-[#F2F2F0]"
                   }`}
                 >
                   {link.label}
-                  {link.external && <span className="ml-0.5 text-[#555555]">↗</span>}
+                  {link.external && <span className="ml-0.5 text-[#888888]">↗</span>}
                 </Link>
               ))}
             </nav>
@@ -118,7 +118,7 @@ export default function Nav() {
                 className="flex items-center justify-between py-6 font-display text-3xl border-b border-[#222222] text-[#F2F2F0]"
               >
                 {link.label}
-                {link.external && <span className="font-mono text-sm text-[#555555]">↗</span>}
+                {link.external && <span className="font-mono text-sm text-[#888888]">↗</span>}
               </Link>
             ))}
           </nav>

@@ -2,10 +2,10 @@
 // Person/WebSite on home; ProfilePage+BreadcrumbList on /work; TechArticle+
 // BreadcrumbList on each case study. No aggregateRating, no employer, no
 // events, nothing unverifiable.
-import { profile } from "@/content/profile";
-import { productionUrl } from "@/lib/site";
+import { profile } from "../content/profile.ts";
+import { productionUrl } from "./site.ts";
 const base = productionUrl ?? "";
-import type { Project } from "@/content/schema";
+import type { Project } from "../content/schema.ts";
 
 const topics = [
   "TypeScript", "Node.js", "Next.js", "React", "Laravel", "Livewire",
@@ -62,6 +62,7 @@ export function breadcrumbJsonLd(parts: { name: string; path: string }[]) {
 
 export function projectJsonLd(p: Project) {
   const node: Record<string, unknown> = {
+    "@context": "https://schema.org",
     "@type": "TechArticle",
     headline: `${p.title} — engineering case study`,
     description: p.summary,

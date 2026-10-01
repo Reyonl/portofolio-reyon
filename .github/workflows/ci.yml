@@ -28,7 +28,7 @@ jobs:
         run: npm run lint
 
       - name: Content integrity tests
-        run: node --test "test/content.test.ts" "test/content-gate.test.ts"
+        run: node --experimental-strip-types --test "test/content.test.ts" "test/content-gate.test.ts" "test/links.test.ts"
 
       - name: Production build
         run: npm run build

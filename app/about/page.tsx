@@ -144,7 +144,7 @@ export default function AboutPage() {
                         <span className="text-[#C9B99A]"> · {m.label}</span>
                       </p>
                       <p className="text-[#F2F2F0] text-sm mb-1.5 leading-snug">{m.title}</p>
-                      <p className="text-[#555555] text-xs leading-relaxed max-w-md">{m.description}</p>
+                      <p className="text-[#888888] text-xs leading-relaxed max-w-md">{m.description}</p>
                     </li>
                   ))}
                 </ol>
@@ -171,7 +171,7 @@ export default function AboutPage() {
             <Link href="/work" className="meta-label text-[#C9B99A] hover-line">
               SELECTED WORK →
             </Link>
-            <Link href="/contact" className="meta-label text-[#555555] hover:text-[#C9B99A] transition-colors hover-line">
+            <Link href="/contact" className="meta-label text-[#888888] hover:text-[#C9B99A] transition-colors hover-line">
               CONTACT →
             </Link>
           </div>

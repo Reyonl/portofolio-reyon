@@ -31,7 +31,7 @@ export default function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="font-mono text-[11px] tracking-[0.15em] text-[#555555] hover:text-[#C9B99A] transition-colors duration-200 hover-line w-fit"
+                  className="font-mono text-[11px] tracking-[0.15em] text-[#888888] hover:text-[#C9B99A] transition-colors duration-200 hover-line w-fit"
                 >
                   {link.label}
                 </Link>
@@ -45,7 +45,7 @@ export default function Footer() {
             <div className="flex flex-col gap-3">
               <a
                 href="mailto:liurey55@gmail.com"
-                className="font-mono text-[11px] tracking-[0.15em] text-[#555555] hover:text-[#C9B99A] transition-colors duration-200 hover-line w-fit"
+                className="font-mono text-[11px] tracking-[0.15em] text-[#888888] hover:text-[#C9B99A] transition-colors duration-200 hover-line w-fit"
               >
                 EMAIL ↗
               </a>
@@ -53,7 +53,7 @@ export default function Footer() {
                 href="https://github.com/Reyonl"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[11px] tracking-[0.15em] text-[#555555] hover:text-[#C9B99A] transition-colors duration-200 hover-line w-fit"
+                className="font-mono text-[11px] tracking-[0.15em] text-[#888888] hover:text-[#C9B99A] transition-colors duration-200 hover-line w-fit"
               >
                 GITHUB ↗
               </a>

@@ -22,7 +22,7 @@ export default function SelectedWork() {
                 each with receipts.
               </h2>
             </div>
-            <Link href="/work" className="meta-label text-[#555555] hover:text-[#C9B99A] transition-colors hover-line pb-2">
+            <Link href="/work" className="meta-label text-[#888888] hover:text-[#C9B99A] transition-colors hover-line pb-2">
               ALL PROJECTS →
             </Link>
           </div>

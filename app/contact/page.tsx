@@ -53,7 +53,7 @@ export default function ContactPage() {
               <p className="meta-label mb-4">EMAIL</p>
               <p className="font-mono text-sm text-[#F2F2F0] break-all">{profile.links.email}</p>
             </div>
-            <p className="meta-label text-[#555555] group-hover:text-[#C9B99A] transition-colors mt-6">
+            <p className="meta-label text-[#888888] group-hover:text-[#C9B99A] transition-colors mt-6">
               WRITE DIRECTLY →
             </p>
           </a>
@@ -67,14 +67,14 @@ export default function ContactPage() {
               <p className="meta-label mb-4">GITHUB</p>
               <p className="font-mono text-sm text-[#F2F2F0]">github.com/{profile.links.githubHandle}</p>
             </div>
-            <p className="meta-label text-[#555555] group-hover:text-[#C9B99A] transition-colors mt-6">
+            <p className="meta-label text-[#888888] group-hover:text-[#C9B99A] transition-colors mt-6">
               INSPECT THE WORK ↗
             </p>
           </a>
         </div>
 
         <ScrollReveal delay={0.05}>
-          <p className="mt-16 max-w-xl text-sm text-[#555555] leading-relaxed border-l border-[#222222] pl-6">
+          <p className="mt-16 max-w-xl text-sm text-[#888888] leading-relaxed border-l border-[#222222] pl-6">
             If a project interests you, mention it by name — every case study
             on this site links to its repository or states plainly why it
             can&apos;t yet.

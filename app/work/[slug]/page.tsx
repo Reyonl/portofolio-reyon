@@ -80,7 +80,7 @@ export default async function WorkDetailPage({ params }: Props) {
           <div className="flex items-center justify-between gap-4 mb-10">
             <Link
               href="/work"
-              className="group inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] uppercase text-[#555555] hover:text-[#C9B99A] transition-colors"
+              className="group inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] uppercase text-[#888888] hover:text-[#C9B99A] transition-colors"
             >
               <span className="group-hover:-translate-x-1 transition-transform duration-200">←</span>
               All work
@@ -270,7 +270,7 @@ export default async function WorkDetailPage({ params }: Props) {
                     href={project.links.release}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between font-mono text-[11px] tracking-[0.15em] uppercase text-[#555555] hover:text-[#C9B99A] transition-colors hover-line"
+                    className="flex items-center justify-between font-mono text-[11px] tracking-[0.15em] uppercase text-[#888888] hover:text-[#C9B99A] transition-colors hover-line"
                   >
                     Release ↗
                   </a>
@@ -280,12 +280,12 @@ export default async function WorkDetailPage({ params }: Props) {
                     href={project.links.live}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between font-mono text-[11px] tracking-[0.15em] uppercase text-[#555555] hover:text-[#C9B99A] transition-colors hover-line"
+                    className="flex items-center justify-between font-mono text-[11px] tracking-[0.15em] uppercase text-[#888888] hover:text-[#C9B99A] transition-colors hover-line"
                   >
                     Live site ↗
                   </a>
                 ) : (
-                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#555555] opacity-40">
+                  <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#888888] opacity-40">
                     No live deployment
                   </p>
                 )}

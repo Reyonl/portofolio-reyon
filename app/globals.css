@@ -82,7 +82,7 @@ body::before {
   font-size: 0.625rem;       /* 10px */
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #555555;
+  color: #888888;
 }
 
 /* ─── Accent label — same but in accent color ───────────────── */
@@ -101,7 +101,7 @@ body::before {
   font-family: var(--font-mono);
   font-size: 0.625rem;
   letter-spacing: 0.12em;
-  color: #555555;
+  color: #888888;
 }
 
 /* ─── Divider line ───────────────────────────────────────────── */
@@ -141,7 +141,7 @@ body::before {
   font-size: 0.6rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #555555;
+  color: #888888;
   background: transparent;
   transition: border-color 0.2s, color 0.2s;
 }
@@ -196,17 +196,23 @@ body::before {
 
 /* ─── Motion — CSS-first, functional only ───────────────────── */
 
-/* Scroll reveal: ScrollReveal.tsx toggles data-visible; no library. */
-.reveal {
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+/* Scroll reveal — zero-JS, CSS scroll-driven animation.
+   Default state is VISIBLE (no-JS and unsupported browsers); the animation
+   only pulls sections in for browsers with scroll-driven animation support,
+   and never for reduced-motion users (global reduce block below). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 42%;
+    }
+  }
 }
-.reveal[data-visible="1"] {
-  opacity: 1;
-  transform: none;
+@keyframes reveal-in {
+  to { opacity: 1; transform: none; }
 }
 
 /* Hero entry sequence: one-time editorial fade-up, staggered by line. */

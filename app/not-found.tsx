@@ -8,7 +8,7 @@ export default function NotFound() {
         <h1 className="font-display text-[9rem] text-[#F2F2F0] leading-none">
           404
         </h1>
-        <p className="meta-label text-[#555555] max-w-xs mx-auto leading-relaxed">
+        <p className="meta-label text-[#888888] max-w-xs mx-auto leading-relaxed">
           This route doesn&apos;t exist in the project. Navigate back to known
           territory.
         </p>

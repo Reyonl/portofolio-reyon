@@ -60,3 +60,24 @@ test("external URLs are absolute https and from known hosts", () => {
     );
   }
 });
+
+// JSON-LD shape rules, asserted on the builders directly (the prerendered
+// artifacts are checked by CI's build step + this same logic).
+test("JSON-LD nodes are schema-complete", async () => {
+  const { projectJsonLd, breadcrumbJsonLd, personJsonLd, websiteJsonLd, profilePageJsonLd } =
+    await import("../lib/jsonld.ts");
+  const nodes = [
+    websiteJsonLd(),
+    personJsonLd(),
+    profilePageJsonLd(),
+    breadcrumbJsonLd([{ name: "Home", path: "/" }]),
+    ...orderedProjects().map((p) => projectJsonLd(p)),
+  ];
+  for (const n of nodes) {
+    assert.equal(n["@context"], "https://schema.org", `@context missing: ${n["@type"]}`);
+    assert.ok(n["@type"], "every node needs @type");
+    const j = JSON.stringify(n);
+    assert.ok(!/localhost/.test(j), "no localhost URLs in structured data");
+    assert.ok(!/aggregateRating|"\s*employer/i.test(j), "no unverifiable properties");
+  }
+});

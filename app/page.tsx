@@ -1,4 +1,5 @@
 import Hero from "@/components/home/Hero";
+import { profilePageJsonLd } from "@/lib/jsonld";
 import SelectedWork from "@/components/home/SelectedWork";
 import FlagshipStory from "@/components/home/FlagshipStory";
 import HowIWork from "@/components/home/HowIWork";
@@ -13,6 +14,10 @@ import Contact from "@/components/home/Contact";
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageJsonLd()) }}
+      />
       <Hero />
       <SelectedWork />
       <FlagshipStory />

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProjectBySlug, orderedProjects, statusLabel } from "@/lib/projects";
+import { productionUrl } from "@/lib/site";
+import { projectJsonLd, breadcrumbJsonLd } from "@/lib/jsonld";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { EvidenceList, RepoLink } from "@/components/work/Evidence";
 
@@ -20,6 +22,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: project.title,
     description: project.summary,
+    alternates: productionUrl
+      ? { canonical: `${productionUrl}/work/${project.slug}` }
+      : undefined,
+    openGraph: {
+      type: "article",
+      title: `${project.title} — case study`,
+      description: project.summary,
+    },
   };
 }
 
@@ -51,6 +61,19 @@ export default async function WorkDetailPage({ params }: Props) {
 
   return (
     <article className="min-h-screen pt-32 pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            breadcrumbJsonLd([
+              { name: "Home", path: "/" },
+              { name: "Work", path: "/work" },
+              { name: project.title, path: `/work/${project.slug}` },
+            ]),
+            projectJsonLd(project),
+          ]),
+        }}
+      />
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         {/* Header */}
         <ScrollReveal>

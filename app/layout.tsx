@@ -4,6 +4,9 @@ import "./globals.css";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import ScrollProgress from "@/components/ui/ScrollProgress";
+import { productionUrl } from "@/lib/site";
+import { websiteJsonLd } from "@/lib/jsonld";
+import { profile } from "@/content/profile";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,37 +28,42 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: productionUrl ? new URL(productionUrl) : undefined,
   title: {
     default: "Reyon Lau Jiemin — Software Engineer",
     template: "%s — Reyon Lau Jiemin",
   },
   description:
-    "Software engineer and web application developer. I build practical web applications, interactive systems, and digital experiences that solve real problems.",
+    "Software engineer building practical web and mobile systems with AI-assisted development workflows. Case studies with verifiable evidence: Hermes DevOps, DAILY.CO, Warung Lupi.",
   keywords: [
     "Reyon Lau Jiemin",
     "software engineer",
     "web developer",
+    "mobile developer",
+    "developer automation",
     "informatics engineering",
     "portfolio",
     "Laravel",
     "Next.js",
-    "full-stack",
+    "TypeScript",
+    "Flutter",
   ],
-  authors: [{ name: "Reyon Lau Jiemin" }],
-  creator: "Reyon Lau Jiemin",
+  authors: [{ name: profile.name }],
+  creator: profile.name,
   openGraph: {
     type: "website",
     locale: "en_US",
+    url: productionUrl ?? undefined,
+    siteName: "Reyon Lau Jiemin",
     title: "Reyon Lau Jiemin — Software Engineer",
     description:
-      "Software engineer and web application developer building practical systems that solve real problems.",
-    siteName: "Reyon Lau Jiemin",
+      "Software engineer building practical web and mobile systems — with AI-assisted development workflows and verifiable evidence.",
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Reyon Lau Jiemin — Software Engineer",
     description:
-      "Software engineer and web application developer building practical systems that solve real problems.",
+      "Practical software systems, shipped and verified: developer automation, web, mobile.",
   },
   robots: { index: true, follow: true },
 };
@@ -72,6 +80,12 @@ export default function RootLayout({
       className={`${inter.variable} ${instrumentSerif.variable} ${jetBrainsMono.variable}`}
     >
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd()),
+          }}
+        />
         <Nav />
         <ScrollProgress />
         <main id="main">{children}</main>

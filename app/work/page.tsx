@@ -4,11 +4,14 @@ import { orderedProjects } from "@/lib/projects";
 import { statusLabel } from "@/lib/projects";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { EvidenceList, RepoLink } from "@/components/work/Evidence";
+import { productionUrl } from "@/lib/site";
+import { breadcrumbJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: "Work",
   description:
     "Selected engineering projects of Reyon Lau Jiemin: developer automation, web systems, and mobile applications — each documented as a case study with verifiable evidence.",
+  alternates: productionUrl ? { canonical: `${productionUrl}/work` } : undefined,
 };
 
 export default function WorkPage() {
@@ -16,6 +19,17 @@ export default function WorkPage() {
 
   return (
     <div className="min-h-screen pt-32 pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            breadcrumbJsonLd([
+              { name: "Home", path: "/" },
+              { name: "Work", path: "/work" },
+            ]),
+          ]),
+        }}
+      />
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <ScrollReveal className="mb-20">
           <p className="accent-label mb-4">SELECTED WORK</p>
@@ -113,7 +127,7 @@ export default function WorkPage() {
                           rel="noopener noreferrer"
                           className="font-mono text-[11px] text-[#C9B99A] hover-line"
                         >
-                          v1.0.1 ↗
+                          GitHub Release ↗
                         </a>
                       </div>
                     )}

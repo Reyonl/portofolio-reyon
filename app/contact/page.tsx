@@ -1,174 +1,90 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { profile } from "@/content/profile";
+import { breadcrumbJsonLd } from "@/lib/jsonld";
+import { productionUrl } from "@/lib/site";
 import ScrollReveal from "@/components/ui/ScrollReveal";
-import SectionHeader from "@/components/ui/SectionHeader";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact Reyon Lau Jiemin — open to project collaborations, freelance work, and new opportunities.",
+    "Contact Reyon Lau Jiemin — software engineer open to engineering work, collaborations, and interesting systems to build.",
+  alternates: productionUrl ? { canonical: `${productionUrl}/contact` } : undefined,
 };
 
-const contactLinks = [
-  {
-    label: "EMAIL",
-    value: "liurey55@gmail.com",
-    href: "mailto:liurey55@gmail.com",
-    external: false,
-  },
-  {
-    label: "GITHUB",
-    value: "github.com/Reyonl",
-    href: "https://github.com/Reyonl",
-    external: true,
-  },
-];
+// No contact form: this site has no backend and a mailto:GET form that opens
+// the visitor's mail client with a half-filled body is worse UX than a direct
+// mail link. Two honest channels, both verified.
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen pt-28 pb-24">
+    <div className="min-h-screen pt-32 pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            breadcrumbJsonLd([
+              { name: "Home", path: "/" },
+              { name: "Contact", path: "/contact" },
+            ]),
+          ]),
+        }}
+      />
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
-        {/* Header */}
         <ScrollReveal className="mb-20">
-          <SectionHeader
-            index="06"
-            label="NEXT DESTINATION"
-            heading={
-              <>
-                Let&apos;s build
-                <br />
-                something.
-              </>
-            }
-          />
+          <p className="accent-label mb-5">CONTACT</p>
+          <h1 className="font-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[1.02] text-[#F2F2F0] max-w-3xl mb-10">
+            Tell me what
+            <br />
+            needs building.
+          </h1>
+          <p className="text-[#888888] leading-relaxed max-w-xl text-lg">
+            Engineering work, freelance systems, or a problem you want someone
+            to think through with — email is the fastest way to reach me.
+          </p>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-20">
-          {/* Left */}
-          <div className="space-y-8">
-            <ScrollReveal>
-              <p className="font-display text-xl text-[#888888] leading-relaxed">
-                Open to collaborations, freelance projects, and opportunities
-                in web development.
-              </p>
-            </ScrollReveal>
-            <ScrollReveal delay={0.08}>
-              <p className="text-[#555555] leading-relaxed text-sm">
-                Whether you have a project in mind, want to discuss web
-                development, or are looking for someone to build something
-                with — send a message and let&apos;s talk.
-              </p>
-            </ScrollReveal>
-
-            {/* Direct links */}
-            <ScrollReveal delay={0.12}>
-              <div className="pt-6 border-t border-[#222222]">
-                <p className="meta-label mb-6">DIRECT LINKS</p>
-                <div className="space-y-px">
-                  {contactLinks.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      target={link.external ? "_blank" : undefined}
-                      rel={link.external ? "noopener noreferrer" : undefined}
-                      className="group flex items-center justify-between border border-[#222222] px-5 py-4 bg-[#0D0D0D] hover:border-[#C9B99A]/20 hover:bg-[#111111] transition-all duration-300"
-                    >
-                      <div>
-                        <p className="meta-label mb-0.5">{link.label}</p>
-                        <p className="font-mono text-[11px] text-[#555555] group-hover:text-[#C9B99A] transition-colors duration-200">
-                          {link.value}
-                        </p>
-                      </div>
-                      <span className="text-[#555555] group-hover:text-[#C9B99A] group-hover:translate-x-0.5 transition-all duration-200 font-mono text-sm">
-                        ↗
-                      </span>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
-
-          {/* Right — form */}
-          <ScrollReveal delay={0.1}>
-            <form
-              action="mailto:liurey55@gmail.com"
-              method="GET"
-              className="space-y-4"
-              aria-label="Contact form"
-            >
-              <div>
-                <label htmlFor="contact-name" className="meta-label block mb-2">
-                  NAME
-                </label>
-                <input
-                  id="contact-name"
-                  name="name"
-                  type="text"
-                  placeholder="Your name"
-                  required
-                  className="w-full bg-[#0D0D0D] border border-[#222222] px-4 py-3 font-mono text-[11px] text-[#F2F2F0] placeholder:text-[#333333] focus:outline-none focus:border-[#C9B99A]/40 transition-colors duration-200"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="contact-email"
-                  className="meta-label block mb-2"
-                >
-                  EMAIL
-                </label>
-                <input
-                  id="contact-email"
-                  name="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  required
-                  className="w-full bg-[#0D0D0D] border border-[#222222] px-4 py-3 font-mono text-[11px] text-[#F2F2F0] placeholder:text-[#333333] focus:outline-none focus:border-[#C9B99A]/40 transition-colors duration-200"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="contact-subject"
-                  className="meta-label block mb-2"
-                >
-                  SUBJECT
-                </label>
-                <input
-                  id="contact-subject"
-                  name="subject"
-                  type="text"
-                  placeholder="What are you building?"
-                  className="w-full bg-[#0D0D0D] border border-[#222222] px-4 py-3 font-mono text-[11px] text-[#F2F2F0] placeholder:text-[#333333] focus:outline-none focus:border-[#C9B99A]/40 transition-colors duration-200"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="contact-message"
-                  className="meta-label block mb-2"
-                >
-                  MESSAGE
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="body"
-                  rows={6}
-                  placeholder="Tell me about your project or opportunity..."
-                  required
-                  className="w-full bg-[#0D0D0D] border border-[#222222] px-4 py-3 font-mono text-[11px] text-[#F2F2F0] placeholder:text-[#333333] focus:outline-none focus:border-[#C9B99A]/40 transition-colors duration-200 resize-none"
-                />
-              </div>
-              <button
-                type="submit"
-                id="contact-submit"
-                className="group inline-flex items-center gap-3 px-8 py-3.5 bg-[#F2F2F0] text-[#080808] font-mono text-[11px] tracking-[0.15em] uppercase transition-all duration-300 hover:bg-[#C9B99A] hover:gap-5"
-              >
-                SEND MESSAGE
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </button>
-            </form>
-          </ScrollReveal>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#222222] border border-[#222222] max-w-3xl">
+          <a
+            href={`mailto:${profile.links.email}`}
+            className="group bg-[#0D0D0D] p-8 lg:p-10 flex flex-col justify-between min-h-[180px] hover:bg-[#111111] transition-colors duration-300"
+          >
+            <div>
+              <p className="meta-label mb-4">EMAIL</p>
+              <p className="font-mono text-sm text-[#F2F2F0] break-all">{profile.links.email}</p>
+            </div>
+            <p className="meta-label text-[#555555] group-hover:text-[#C9B99A] transition-colors mt-6">
+              WRITE DIRECTLY →
+            </p>
+          </a>
+          <a
+            href={profile.links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group bg-[#0D0D0D] p-8 lg:p-10 flex flex-col justify-between min-h-[180px] hover:bg-[#111111] transition-colors duration-300"
+          >
+            <div>
+              <p className="meta-label mb-4">GITHUB</p>
+              <p className="font-mono text-sm text-[#F2F2F0]">github.com/{profile.links.githubHandle}</p>
+            </div>
+            <p className="meta-label text-[#555555] group-hover:text-[#C9B99A] transition-colors mt-6">
+              INSPECT THE WORK ↗
+            </p>
+          </a>
         </div>
+
+        <ScrollReveal delay={0.05}>
+          <p className="mt-16 max-w-xl text-sm text-[#555555] leading-relaxed border-l border-[#222222] pl-6">
+            If a project interests you, mention it by name — every case study
+            on this site links to its repository or states plainly why it
+            can&apos;t yet.
+          </p>
+          <div className="mt-8 flex gap-10">
+            <Link href="/work" className="meta-label text-[#C9B99A] hover-line">
+              BACK TO WORK →
+            </Link>
+          </div>
+        </ScrollReveal>
       </div>
     </div>
   );

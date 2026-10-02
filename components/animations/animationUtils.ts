@@ -1,51 +1,78 @@
 // ============================================================================
-// animationUtils.ts — Easing curves, variant generators, and performance helpers
+// animationUtils.ts — Easing presets, variants, timing constants, formatters
 // ============================================================================
-// Performance: pure mathematical transforms + CSS cubic-bezier strings.
-// Bundle size: < 1.5KB minified, 0 dependencies.
+// Single source of truth for motion timing across the library. Framer Motion
+// accepts bezier arrays directly, so we keep typed presets here and pass them
+// into transitions. No runtime deps — tree-shakes to <1KB.
 
-import type { EasingPreset } from "./animations.types";
+/** Easing bezier presets (Framer Motion cubic-bezier arrays). */
+export const EASINGS = {
+  easeOut: [0.16, 1, 0.3, 1] as const, // snappy decel — entrances
+  easeInOut: [0.65, 0, 0.35, 1] as const, // symmetric — exits
+  circOut: [0, 0.55, 0.45, 1] as const, // long glide
+  backOut: [0.34, 1.56, 0.64, 1] as const, // overshoot — playful pops
+} as const;
 
-/**
- * Standard CSS easing curves matching Framer Motion's default presets.
- * Used across CSS animations, inline styles, and JS-driven rAF transitions.
- */
-export const EASING_BEZIERS: Record<EasingPreset, string> = {
-  easeOut: "cubic-bezier(0.16, 1, 0.3, 1)", // snappy start, smooth landing
-  easeInOut: "cubic-bezier(0.65, 0, 0.35, 1)",
-  backOut: "cubic-bezier(0.34, 1.56, 0.64, 1)",
-  anticipate: "cubic-bezier(0.36, 0, 0.66, -0.56)",
-};
+export type EasingName = keyof typeof EASINGS;
 
-/**
- * Standard cubic easeOut formula for numeric interpolation: f(t) = 1 - (1 - t)^3.
- */
-export function easeOutCubic(t: number): number {
-  return 1 - Math.pow(1 - t, 3);
+/** Global timing constants (seconds — Framer Motion unit). */
+export const TIMING = {
+  pageExit: 0.2,
+  pageEnter: 0.4,
+  staggerItem: 0.5,
+  counter: 1.4,
+  codeLine: 0.28,
+  codeStagger: 0.045,
+  tilePop: 0.5,
+  tileStagger: 0.07,
+  hoverMs: 180,
+} as const;
+
+/** Container/item variant factory for StaggerRevealContainer (whileInView). */
+export function staggerVariants(offsetY: number, duration: number) {
+  return {
+    container: {
+      hidden: {},
+      visible: { transition: { staggerChildren: TIMING.tileStagger * 1.3 } },
+    },
+    item: {
+      hidden: { opacity: 0, y: offsetY, scale: 0.985 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { duration, ease: EASINGS.easeOut },
+      },
+    },
+  } as const;
 }
 
-/**
- * Clamp a number between min and max bounds.
- */
-export function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max);
-}
+/** Page enter/exit variant for AnimatePresence in app/template.tsx. */
+export const pageVariants = {
+  initial: { opacity: 0, scale: 0.985, y: 14 },
+  enter: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: TIMING.pageEnter, ease: EASINGS.easeOut },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.99,
+    y: -8,
+    transition: { duration: TIMING.pageExit, ease: EASINGS.easeInOut },
+  },
+} as const;
 
-/**
- * Formats a number with thousand separators (e.g. 1000 -> "1,000").
- */
-export function formatLocaleNumber(n: number, decimals: number = 0): string {
+/** Formats a number with locale separators, fixed decimals. */
+export function formatLocaleNumber(n: number, decimalPlaces = 0): string {
   return n.toLocaleString("en-US", {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
+    minimumFractionDigits: decimalPlaces,
+    maximumFractionDigits: decimalPlaces,
   });
 }
 
-/**
- * Check whether the client environment requests reduced motion.
- * Safely returns false during Server Component rendering.
- */
-export function getPrefersReducedMotion(): boolean {
-  if (typeof window === "undefined" || !window.matchMedia) return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/** Clamp helper (used by scroll math). */
+export function clamp(v: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, v));
 }

@@ -1,21 +1,22 @@
 // ============================================================================
 // animations.types.ts — TypeScript contract for the portfolio animation library
 // ============================================================================
-// Architecture: Framer Motion-compatible props, implemented with Next 16 / React 19
-// performance guarantees (CSS scroll-driven, IntersectionObserver, requestAnimationFrame).
-// Zero-runtime footprint when animations are disabled by prefers-reduced-motion.
+// Architecture (P6.3): REAL Framer Motion 13 (AnimatePresence, motion, useScroll,
+// useMotionValue/useTransform, useInView, useReducedMotion) on Next 16 / React 19.
+// Every component keeps the Honesty Engine contract: server HTML shows the FINAL
+// state; motion only enhances after hydration. All props strict-mode typed.
 
 import type { ReactNode } from "react";
 
-/** Easing preset names aligned with Framer Motion easing curves. */
-export type EasingPreset = "easeOut" | "easeInOut" | "backOut" | "anticipate";
+/** Easing presets (Framer Motion easing names). */
+export type EasingPreset = "easeOut" | "easeInOut" | "circOut" | "backOut";
 
 // 1. PageTransitionWrapper
 export interface PageTransitionWrapperProps {
   children: ReactNode;
-  /** Duration in ms for { exit, enter }. Defaults: { exit: 200, enter: 400 }. */
+  /** Durations in seconds for { exit, enter }. Defaults: { exit: 0.2, enter: 0.4 }. */
   duration?: { exit?: number; enter?: number };
-  /** Whether direct children are staggered on entrance. Default: true. */
+  /** Stagger direct children on entrance. Default: false (full-page feels tighter). */
   staggerChildren?: boolean;
   className?: string;
 }
@@ -23,11 +24,11 @@ export interface PageTransitionWrapperProps {
 // 2. StaggerRevealContainer
 export interface StaggerRevealContainerProps {
   children: ReactNode;
-  /** Stagger delay between items in ms. Default: 100ms (50ms on mobile). */
+  /** Stagger delay between items in seconds. Default: 0.09. */
   staggerDelay?: number;
-  /** Duration per child in ms. Default: 500ms. */
+  /** Duration per child in seconds. Default: 0.5. */
   duration?: number;
-  /** Initial slide offset on Y axis in pixels. Default: 20px. */
+  /** Initial slide offset on Y axis in pixels. Default: 24 (punchy). */
   offsetY?: number;
   easing?: EasingPreset;
   className?: string;
@@ -36,19 +37,19 @@ export interface StaggerRevealContainerProps {
 
 // 3. AnimatedCounter
 export interface AnimatedCounterProps {
-  /** Target integer to count to. */
+  /** Target number to count to — this value is what SSR/no-JS users see. */
   to: number;
-  /** Starting integer. Default: 0. */
+  /** Starting number. Default: 0. */
   from?: number;
-  /** Duration in seconds. Default: 1.2s. */
+  /** Duration in seconds. Default: 1.4. */
   duration?: number;
-  /** Text appended after the number, e.g. " shipped systems". */
+  /** Text appended after the number, e.g. " / 15 PASS". */
   suffix?: string;
   /** Text prepended before the number, e.g. "+". */
   prefix?: string;
-  /** Custom formatter function. Defaults to locale-formatted whole number. */
+  /** Custom formatter. Defaults to locale-formatted whole number. */
   formatNumber?: (n: number) => string;
-  /** Number of decimal places. Default: 0. */
+  /** Decimal places. Default: 0. */
   decimalPlaces?: number;
   className?: string;
 }
@@ -57,9 +58,9 @@ export interface AnimatedCounterProps {
 export interface ScrollProgressBarProps {
   /** Height in pixels. Default: 3. */
   height?: number;
-  /** Enable Sky Blue gradient (#63B3FF → #8CC8FF). Default: true. */
+  /** Sky Blue gradient (#63B3FF → #8CC8FF). Default: true. */
   gradient?: boolean;
-  /** Enable subtle glow shadow. Default: true. */
+  /** Subtle glow shadow. Default: true. */
   glowEffect?: boolean;
   color?: string;
   zIndex?: number;
@@ -71,9 +72,10 @@ export interface HoverCardProps {
   children: ReactNode;
   onHover?: () => void;
   glowColor?: string;
+  /** Scale on hover. Default: 1.03. */
   scale?: number;
   className?: string;
-  /** Optional clickable URL wrapping the card. */
+  /** If set, renders an <a> instead of <div>. */
   href?: string;
 }
 
@@ -99,12 +101,12 @@ export interface HoverLinkProps {
 // 6. AmbientBackground
 export interface AmbientBackgroundProps {
   enabled?: boolean;
-  /** Duration multiplier (1 = 24s cycle). Default: 1. */
+  /** Duration multiplier (1 = 26s cycle). Default: 1. */
   speed?: number;
-  /** Opacity range 0–1. Default: 0.5. */
+  /** Opacity 0–1. Default: 0.5. */
   intensity?: number;
   colors?: [string, string];
-  /** Disable automatic ambient drift on screens < 768px. Default: true. */
+  /** Disable drift on screens < 768px (pure CSS, no hydration branch). Default: true. */
   disableOnMobile?: boolean;
   className?: string;
 }
@@ -113,9 +115,11 @@ export interface AmbientBackgroundProps {
 export interface CodeBlockRevealProps {
   code: string;
   language?: string;
+  /** Per-line stagger in seconds. Default: 0.045. */
   staggerDelay?: number;
+  /** Per-line duration in seconds. Default: 0.28. */
   duration?: number;
-  /** 1-based line numbers to highlight with accent tint. */
+  /** 1-based line numbers highlighted with accent tint. */
   highlightLines?: number[];
   showLineNumbers?: boolean;
   maxHeight?: string;

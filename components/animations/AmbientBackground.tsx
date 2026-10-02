@@ -1,19 +1,15 @@
 "use client";
 
 // ============================================================================
-// AmbientBackground.tsx — Subtle breathing gradient behind all content
+// AmbientBackground.tsx — Breathing gradient (pure CSS drift, minimal wrapper)
 // ============================================================================
-// Fixed, pointer-events-none, z-index below content. Animation is a 24s
-// (adjustable) background-position drift on a 200%-sized gradient — GPU-safe
-// composition, near-zero CPU. Disabled automatically under reduced motion and
-// optionally on mobile (disableOnMobile, default true) via matchMedia.
-//
-// Performance: will-change limited to one full-viewport element; the gradient
-// never overlaps text contrast requirements (intensity capped at 0.5 on the
-// #08090C→#171A21 axis, keeping WCAG AAA contrast against #F5F7FA/#9AA1AD).
-// ~1.5KB minified.
+// Per revised brief: pure CSS keyframes carry the drift; this wrapper only
+// supplies palette/opacity/duration. Mobile disable is a CSS media query
+// (globals.css `.ambient-bg--auto-static`) — no matchMedia, no hydration
+// branch, identical server/client HTML.
+// A11y: aria-hidden (decorative). Reduced-motion: global CSS guard flattens.
+// Performance: background-position on one fixed layer, ~0.3KB component.
 
-import { useReducedMotion } from "./useAnimations";
 import type { AmbientBackgroundProps } from "./animations.types";
 
 export default function AmbientBackground({
@@ -24,20 +20,9 @@ export default function AmbientBackground({
   disableOnMobile = true,
   className = "",
 }: AmbientBackgroundProps) {
-  const reduced = useReducedMotion();
+  if (!enabled) return null;
 
-  if (!enabled || reduced) {
-    // Static gradient — identical palette, zero motion.
-    return (
-      <div
-        aria-hidden="true"
-        className={`fixed inset-0 -z-10 pointer-events-none ${className}`.trim()}
-        style={{ background: `linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%)` }}
-      />
-    );
-  }
-
-  const durationSec = Math.max(8, 24 / speed);
+  const durationSec = Math.max(8, 26 / speed);
 
   return (
     <div
@@ -64,5 +49,5 @@ export default function AmbientBackground({
 
 /*
 USAGE EXAMPLE (app/layout.tsx, first child of <body>):
-  <AmbientBackground intensity={0.35} speed={0.8} />
+  <AmbientBackground intensity={0.35} speed={0.8} disableOnMobile />
 */

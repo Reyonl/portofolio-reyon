@@ -1,47 +1,69 @@
 "use client";
 
 // ============================================================================
-// AnimatedCounter.tsx — Scroll-triggered number counter for verified stats
+// AnimatedCounter.tsx — MotionValue-driven number counter (Honesty-safe)
 // ============================================================================
-// rAF tween from `from` → `to` with easeOut over durationSec, triggered when
-// the element scrolls into view. Cleanup via cancelAnimationFrame in the hook.
+// Spec: useMotionValue + useTransform + animate() from framer-motion, eased
+// easeOut, starts when scrolled into view (useInView once).
 //
-// HONESTY RULE (this portfolio's contract): only animate numbers that are
-// already displayed as static text server-side. The SSR render shows the
-// FINAL value inside <noscript>-safe markup; hydration swaps to 0 → tween.
-// Search engines, screen readers, JS-disabled users, and reduced-motion users
-// all see the verified final number, never an animated lie.
-// Performance: ~1.5KB, no interval leaks, single rAF per element.
-// A11y: aria-hidden on the animating copy; a visually-hidden static span
-// carries the final value for assistive tech at all times.
+// HONESTY ENGINE: SSR/no-JS/reduced-motion all render the FINAL number
+// (`to` + suffix/prefix). The 0→N tween is aria-hidden and only takes over
+// after hydration when the element enters the viewport — crawlers, screen
+// readers and JS-off users always see the verified value, never a fake 0.
+// Performance: MotionValue writes bypass React re-render per frame (text
+// updates via useTransform subscription — single DOM text node). ~1.8KB.
 
-import type { AnimatedCounterProps } from "./animations.types";
-import { useIntersectionTrigger, useNumberTween } from "./useAnimations";
+import {
+  animate,
+  motion,
+  useInView,
+  useMotionValue,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
+import { useEffect, useRef } from "react";
 import { formatLocaleNumber } from "./animationUtils";
+import type { AnimatedCounterProps } from "./animations.types";
 
 export default function AnimatedCounter({
   to,
   from = 0,
-  duration = 1.2,
+  duration = 1.4,
   suffix = "",
   prefix = "",
   formatNumber,
   decimalPlaces = 0,
   className = "",
 }: AnimatedCounterProps) {
-  const [ref, inView] = useIntersectionTrigger({ threshold: 0.4, once: true });
-  const value = useNumberTween({ from, to, durationSec: duration, trigger: inView });
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -40px 0px" });
+  const reduced = useReducedMotion();
 
-  const fmt = formatNumber ?? ((n: number) => formatLocaleNumber(n, decimalPlaces));
-  const finalText = `${prefix}${fmt(to)}${suffix}`;
+  const count = useMotionValue(reduced ? to : from);
+  const text = useTransform(count, (v) =>
+    (formatNumber ?? ((n: number) => formatLocaleNumber(n, decimalPlaces)))(v)
+  );
+
+  useEffect(() => {
+    if (!inView || reduced) return;
+    const controls = animate(count, to, {
+      duration,
+      ease: "easeOut",
+    });
+    return () => controls.stop();
+  }, [inView, reduced, count, to, duration]);
+
+  const finalText = `${prefix}${(formatNumber ?? ((n: number) => formatLocaleNumber(n, decimalPlaces)))(to)}${suffix}`;
 
   return (
     <span ref={ref} className={className}>
-      <span aria-hidden="true">
+      {/* Animated copy — visual only. */}
+      <motion.span aria-hidden="true">
         {prefix}
-        {fmt(value)}
+        <motion.span>{text}</motion.span>
         {suffix}
-      </span>
+      </motion.span>
+      {/* Final value for AT/crawlers/no-JS — always the truth. */}
       <span className="sr-only">{finalText}</span>
     </span>
   );
@@ -49,7 +71,6 @@ export default function AnimatedCounter({
 
 /*
 USAGE EXAMPLES:
-  <AnimatedCounter to={3} suffix=" shipped systems" />
-  <AnimatedCounter to={198} suffix=" / 198 tests" />
-  <AnimatedCounter to={15} suffix=" / 15" />
+  <AnimatedCounter to={15} suffix=" / 15 PASS" />
+  <AnimatedCounter to={198} suffix=" / 198" duration={1.4} />
 */

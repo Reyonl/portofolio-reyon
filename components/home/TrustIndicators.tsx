@@ -21,7 +21,7 @@ export function VerificationStrip() {
   return (
     <div
       className="grid grid-cols-2 lg:grid-cols-4 border-y border-[#2A2E37] bg-[#101217] divide-x divide-[#2A2E37]"
-      role="list"
+      role="group"
       aria-label="Verification badges"
     >
       {[
@@ -52,7 +52,6 @@ export function VerificationStrip() {
       ].map((b) => (
         <a
           key={b.label}
-          role="listitem"
           href={b.href}
           target={b.href.startsWith("http") ? "_blank" : undefined}
           rel={b.href.startsWith("http") ? "noopener noreferrer" : undefined}

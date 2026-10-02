@@ -1,19 +1,17 @@
 "use client";
 
 // ============================================================================
-// ScrollProgressBar.tsx — Fixed top reading-progress indicator
+// ScrollProgressBar.tsx — useScroll + useSpring gradient progress indicator
 // ============================================================================
-// Replaces components/ui/ScrollProgress with the same rAF pattern, now with
-// Framer-compatible props (height, gradient, glow, color, zIndex) and proper
-// ARIA progressbar semantics.
-//
-// Performance: scaleX transform only (no reflow, GPU-composited), passive
-// scroll listener, one shared rAF. ~1.2KB minified.
-// A11y: role="progressbar" with live aria-valuenow; decorative for AT that
-// ignore it; no keyboard target needed (purely informational).
+// Framer's useScroll() reads document scroll on the main thread without
+// React state; scaleX is driven by a spring-smoothed MotionValue written
+// straight to the transform — no re-render per scroll frame.
+// A11y: role="progressbar" with live aria-valuenow (updated via state at a
+// throttled rate — 1 state write per percent step, not per frame).
+// Performance: compositor-only transform, passive by default. ~1.5KB.
 
-import { useEffect, useRef } from "react";
-import { useScrollProgress, useReducedMotion } from "./useAnimations";
+import { motion, useMotionValueEvent, useScroll, useSpring } from "framer-motion";
+import { useState } from "react";
 import type { ScrollProgressBarProps } from "./animations.types";
 
 export default function ScrollProgressBar({
@@ -24,43 +22,42 @@ export default function ScrollProgressBar({
   zIndex = 60,
   className = "",
 }: ScrollProgressBarProps) {
-  const progress = useScrollProgress(); // 0..1, rAF-throttled
-  const reduced = useReducedMotion();
-  const barRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 220,
+    damping: 32,
+    restDelta: 0.001,
+  });
+  const [pct, setPct] = useState(0);
 
-  // Write the transform imperatively so React state updates (which we still
-  // need for aria-valuenow) never double-paint the bar itself.
-  useEffect(() => {
-    if (barRef.current) {
-      barRef.current.style.transform = `scaleX(${progress})`;
-    }
-  }, [progress]);
-
-  const background = gradient
-    ? "linear-gradient(90deg, #63B3FF 0%, #8CC8FF 100%)"
-    : color;
+  // aria-valuenow only changes per whole percent → ~100 state writes max/page.
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    const next = Math.round(v * 100);
+    setPct((prev) => (prev === next ? prev : next));
+  });
 
   return (
-    <div
+    <motion.div
       className={`fixed top-0 left-0 right-0 pointer-events-none ${className}`.trim()}
       style={{ height: `${height}px`, zIndex }}
       role="progressbar"
       aria-label="Page scroll progress"
-      aria-valuenow={Math.round(progress * 100)}
+      aria-valuenow={pct}
       aria-valuemin={0}
       aria-valuemax={100}
     >
-      <div
-        ref={barRef}
+      <motion.div
         className="h-full w-full origin-left"
         style={{
-          background,
-          transform: "scaleX(0)",
-          boxShadow: glowEffect && !reduced ? `0 0 10px ${color}80` : "none",
-          willChange: reduced ? "auto" : "transform",
+          scaleX,
+          background: gradient
+            ? "linear-gradient(90deg, #63B3FF 0%, #8CC8FF 100%)"
+            : color,
+          boxShadow: glowEffect ? `0 0 10px ${color}80` : "none",
+          willChange: "transform",
         }}
       />
-    </div>
+    </motion.div>
   );
 }
 

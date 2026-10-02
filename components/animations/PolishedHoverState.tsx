@@ -1,97 +1,113 @@
 "use client";
 
 // ============================================================================
-// PolishedHoverState.tsx — HoverCard · HoverButton · HoverLink
+// PolishedHoverState.tsx — HoverCard / HoverButton / HoverLink (whileHover)
 // ============================================================================
-// Multi-layer hover states implemented with CSS transitions + :focus-visible
-// parity (keyboard users get the identical treatment). No JS listener churn:
-// the browser compositor runs transform/box-shadow transitions at 60fps.
+// Framer Motion whileHover states with spring physics — IMMEDIATE feedback,
+// punchy scale + glow + border shift. Blueprint language kept: hard edges,
+// accent #63B3FF — no mushy blobs.
 //
-// Performance: transform-only motion (scale, translateY), shadow via
-// box-shadow transition on a pseudo-layered border color. ~2KB minified total.
-// Touch: hover effects are wrapped in @media (hover: hover) in globals.css so
-// swipe gestures never stick a card in its hover state on mobile.
+// Touch safety: whileHover only fires on pointer-hover devices; Framer's
+// pointer events don't trigger sticky-hover on touch the way CSS :hover can.
+// Focus parity: whileFocus mirrors hover scale on the button (keyboard users
+// get identical affordance), plus :focus-visible ring via Tailwind classes.
+// Performance: transform + box-shadow transitions only, 180ms. ~2.4KB.
 
-import Link from "next/link";
-import type { HoverCardProps, HoverButtonProps, HoverLinkProps } from "./animations.types";
+import { motion, useReducedMotion } from "framer-motion";
+import type { CSSProperties, ReactNode } from "react";
+import type {
+  HoverButtonProps,
+  HoverCardProps,
+  HoverLinkProps,
+} from "./animations.types";
 
-// ─── 5a. HoverCard ───────────────────────────────────────────────────────────
+const SPRING = { type: "spring", stiffness: 420, damping: 26 } as const;
+
+function useHoverMotion(scale: number, glowColor: string) {
+  const reduced = useReducedMotion();
+  return {
+    whileHover: reduced
+      ? undefined
+      : { scale, boxShadow: `0 0 0 1px ${glowColor}33, 6px 6px 0 #05060A` },
+    transition: SPRING,
+  };
+}
+
+/** Boxed panel with lift + glow on hover. Renders <a> if href given. */
 export function HoverCard({
   children,
   onHover,
-  glowColor = "rgba(99, 179, 255, 0.28)",
-  scale = 1.02,
+  glowColor = "#63B3FF",
+  scale = 1.03,
   className = "",
   href,
 }: HoverCardProps) {
-  const style = {
-    "--hover-glow": glowColor,
-    "--hover-scale": String(scale),
-  } as React.CSSProperties;
-
-  const inner = <div className={`hover-card ${className}`.trim()} style={style} onMouseEnter={onHover}>{children}</div>;
+  const motionProps = useHoverMotion(scale, glowColor);
+  const style: CSSProperties = { transformOrigin: "center" };
 
   if (href) {
-    const isExternal = href.startsWith("http");
-    if (isExternal) {
-      return (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="block focus-visible:outline-2 focus-visible:outline-[#63B3FF] focus-visible:outline-offset-2">
-          {inner}
-        </a>
-      );
-    }
     return (
-      <Link href={href} className="block focus-visible:outline-2 focus-visible:outline-[#63B3FF] focus-visible:outline-offset-2">
-        {inner}
-      </Link>
+      <motion.a
+        href={href}
+        className={`block border border-[#2A2E37] bg-[#101217] outline-none focus-visible:ring-2 focus-visible:ring-[#63B3FF] ${className}`.trim()}
+        style={style}
+        onMouseEnter={onHover}
+        {...motionProps}
+      >
+        {children}
+      </motion.a>
     );
   }
-  return inner;
+  return (
+    <motion.div
+      className={`border border-[#2A2E37] bg-[#101217] ${className}`.trim()}
+      style={style}
+      onMouseEnter={onHover}
+      {...motionProps}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
-// ─── 5b. HoverButton ─────────────────────────────────────────────────────────
+/** Primary/secondary/ghost button with translateY lift + glow. */
 export function HoverButton({
   children,
   onClick,
   variant = "primary",
   disabled = false,
-  glowColor = "rgba(99, 179, 255, 0.4)",
+  glowColor = "#63B3FF",
   type = "button",
   className = "",
 }: HoverButtonProps) {
-  const variantClasses = {
-    primary:
-      "bg-[#63B3FF] text-[#08090C] font-bold hover:bg-[#8CC8FF]",
+  const reduced = useReducedMotion();
+  const base =
+    "inline-flex items-center gap-3 px-7 py-3.5 font-mono text-[11px] tracking-[0.15em] uppercase font-bold outline-none focus-visible:ring-2 focus-visible:ring-[#63B3FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#08090C]";
+  const variants: Record<string, string> = {
+    primary: "bg-[#63B3FF] text-[#08090C] hover:bg-[#8CC8FF]",
     secondary:
       "border-2 border-[#2A2E37] text-[#9AA1AD] hover:border-[#63B3FF] hover:text-[#63B3FF]",
-    ghost: "text-[#9AA1AD] hover:text-[#63B3FF]",
-  }[variant];
+    ghost: "text-[#63B3FF] hover:bg-[#63B3FF14]",
+  };
 
   return (
-    <button
+    <motion.button
       type={type}
-      onClick={onClick}
       disabled={disabled}
-      aria-disabled={disabled}
-      className={[
-        "hover-btn",
-        "inline-flex items-center gap-2 px-7 py-3.5 font-mono text-[11px] tracking-[0.15em] uppercase",
-        "transition-all duration-150 ease-out",
-        "focus-visible:outline-2 focus-visible:outline-[#8CC8FF] focus-visible:outline-offset-2",
-        "disabled:opacity-40 disabled:pointer-events-none",
-        variantClasses,
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      style={{ "--btn-glow": glowColor } as React.CSSProperties}
+      onClick={onClick}
+      className={`${base} ${variants[variant]} ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${className}`.trim()}
+      whileHover={reduced || disabled ? undefined : { y: -2, scale: 1.02 }}
+      whileFocus={reduced || disabled ? undefined : { y: -2, scale: 1.02 }}
+      whileTap={reduced || disabled ? undefined : { scale: 0.98 }}
+      transition={SPRING}
+      style={{ boxShadow: `0 10px 28px -14px ${glowColor}59` }}
     >
       {children}
-    </button>
+    </motion.button>
   );
 }
 
-// ─── 5c. HoverLink ───────────────────────────────────────────────────────────
+/** Inline text link with animated underline reveal. */
 export function HoverLink({
   children,
   href,
@@ -100,36 +116,35 @@ export function HoverLink({
   external = false,
   className = "",
 }: HoverLinkProps) {
-  const classes = [
-    "hover-link",
-    "relative inline-block font-mono text-[11px] tracking-[0.12em] uppercase",
-    "text-[#9AA1AD] hover:text-[#63B3FF] transition-colors duration-200",
-    "focus-visible:outline-2 focus-visible:outline-[#63B3FF] focus-visible:outline-offset-2",
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  const resolvedRel = rel ?? (external ? "noopener noreferrer" : undefined);
-  const resolvedTarget = target ?? (external ? "_blank" : undefined);
-
-  if (external || href.startsWith("http") || href.startsWith("mailto:")) {
-    return (
-      <a href={href} target={resolvedTarget} rel={resolvedRel} className={classes}>
-        {children}
-      </a>
-    );
-  }
+  const reduced = useReducedMotion();
   return (
-    <Link href={href} className={classes}>
+    <motion.a
+      href={href}
+      target={target ?? (external ? "_blank" : undefined)}
+      rel={rel ?? (external ? "noopener noreferrer" : undefined)}
+      className={`relative inline-block text-[#63B3FF] outline-none focus-visible:ring-2 focus-visible:ring-[#63B3FF] ${className}`.trim()}
+      whileHover={reduced ? undefined : { y: -1 }}
+      transition={SPRING}
+    >
       {children}
-    </Link>
+      <motion.span
+        aria-hidden="true"
+        className="absolute left-0 -bottom-0.5 h-0.5 w-full bg-[#63B3FF] origin-left"
+        initial={{ scaleX: 0 }}
+        variants={{ hover: { scaleX: 1 } }}
+        style={{ transformOrigin: "left" }}
+      />
+    </motion.a>
   );
 }
 
 /*
-USAGE EXAMPLE:
-  <HoverCard href="/work/hermes-devops">…</HoverCard>
-  <HoverButton variant="primary">Deploy v0.7.5</HoverButton>
-  <HoverLink href="https://github.com/Reyonl" external>GitHub ↗</HoverLink>
+USAGE EXAMPLES:
+  <HoverCard href="/work/hermes-devops" scale={1.02}>
+    <ProjectPanelInner />
+  </HoverCard>
+
+  <HoverButton variant="primary" onClick={submit}>Send message</HoverButton>
+
+  <HoverLink href="/work" external={false}>All projects</HoverLink>
 */

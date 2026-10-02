@@ -1,30 +1,35 @@
 "use client";
 
 // ============================================================================
-// CodeBlockReveal.tsx — Line-by-line entrance for case-study code snippets
+// CodeBlockReveal.tsx — Line-by-line staggered code reveal
 // ============================================================================
-// Splits `code` on \n; each line enters with fade + translate(-12px→0) when
-// the block scrolls into view. Presentational — the whole code string is also
-// inside a <pre><code> fallback read by screen readers and search indexers.
-// Highlights are tinted backgrounds on matching 1-based line indices.
+// Each line enters with fade + translateX(-12→0) on a 45ms stagger once the
+// block scrolls into view. Text remains selectable; the full string is also
+// exposed via <pre class="sr-only"> for screen readers/search (visual rows are
+// aria-hidden to avoid double announcement).
 //
-// Performance: ~2KB minified, transform/opacity only, reads 100+ line blocks
-// with zero code highlighting parser dependency (string split is O(n)).
+// No syntax-highlight parser dependency — token colors come from the registry
+// if provided later; meanwhile monochrome #C9CDD6 keeps AAA contrast.
+// Dynamic-import ready: parent can next/dynamic(() => import(...), { ssr:false }).
+// Performance: ~2KB, transform/opacity only.
 
-import { useIntersectionTrigger, useReducedMotion } from "./useAnimations";
+import { motion, useReducedMotion } from "framer-motion";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 import type { CodeBlockRevealProps } from "./animations.types";
 
 export default function CodeBlockReveal({
   code,
   language = "typescript",
-  staggerDelay = 50,
-  duration = 300,
+  staggerDelay = 0.045,
+  duration = 0.28,
   highlightLines = [],
   showLineNumbers = false,
-  maxHeight = "400px",
+  maxHeight = "420px",
   className = "",
 }: CodeBlockRevealProps) {
-  const [ref, inView] = useIntersectionTrigger({ threshold: 0.15, once: true });
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -60px 0px" });
   const reduced = useReducedMotion();
   const lines = code.split("\n");
 
@@ -32,51 +37,50 @@ export default function CodeBlockReveal({
     <div
       ref={ref}
       className={`code-reveal overflow-auto border border-[#2A2E37] bg-[#0D0E13] ${className}`.trim()}
-      style={{ maxHeight, "--code-delay": `${staggerDelay}ms`, "--code-duration": `${duration}ms` } as React.CSSProperties}
+      style={{ maxHeight }}
       role="region"
       aria-label={`${language} code snippet (${lines.length} lines)`}
     >
-      {/* Search/indexable + screen-reader copy — the visual line rows below
-          are aria-hidden to prevent double-announcement. */}
+      {/* Accessible + indexable copy — visual rows below are aria-hidden. */}
       <pre className="sr-only">
         <code>{code}</code>
       </pre>
 
-      <div
-        className="font-mono text-[12px] leading-relaxed"
-        aria-hidden="true"
-      >
+      <div className="font-mono text-[12px] leading-relaxed" aria-hidden="true">
         {lines.map((line, i) => {
-          const lineNumber = i + 1;
-          const isHighlight = highlightLines.includes(lineNumber);
-          const needsAnim = !reduced && inView;
-
+          const isHighlight = highlightLines.includes(i + 1);
           return (
-            <div
-              key={lineNumber}
+            <motion.div
+              key={i}
               className={[
                 "code-line flex",
-                isHighlight ? "bg-[rgba(99,179,255,0.12)] border-l-2 border-[#63B3FF]" : "",
+                isHighlight
+                  ? "bg-[rgba(99,179,255,0.12)] border-l-2 border-[#63B3FF]"
+                  : "",
                 "px-4 py-0.5",
               ]
                 .filter(Boolean)
                 .join(" ")}
-              style={
-                needsAnim
-                  ? ({
-                      animation: `code-line-in ${duration}ms var(--code-ease, cubic-bezier(0.33, 1, 0.68, 1)) both`,
-                      animationDelay: `calc(${i} * var(--code-delay, 50ms))`,
-                    } as React.CSSProperties)
-                  : undefined
-              }
+              initial={reduced || inView ? false : { opacity: 0, x: -12 }}
+              animate={inView || reduced ? { opacity: 1, x: 0 } : undefined}
+              transition={{
+                duration,
+                ease: [0.33, 1, 0.68, 1],
+                delay: reduced ? 0 : i * staggerDelay,
+              }}
             >
               {showLineNumbers && (
-                <span className="text-[#9AA1AD] select-none tabular-nums pr-4 text-right min-w-[28px]" aria-hidden="true">
-                  {lineNumber}
+                <span
+                  className="text-[#9AA1AD] select-none tabular-nums pr-4 text-right min-w-[28px]"
+                  aria-hidden="true"
+                >
+                  {i + 1}
                 </span>
               )}
-              <code className="whitespace-pre-wrap break-words text-[#C9CDD6]">{line || " "}</code>
-            </div>
+              <code className="whitespace-pre-wrap break-words text-[#C9CDD6]">
+                {line || " "}
+              </code>
+            </motion.div>
           );
         })}
       </div>
@@ -85,11 +89,13 @@ export default function CodeBlockReveal({
 }
 
 /*
-USAGE EXAMPLE:
-  <CodeBlockReveal
-    code={project.codeSample ?? "const hermes = new DevOpsOrchestrator();"}
-    language="typescript"
-    showLineNumbers
-    highlightLines={[2]}
-  />
+USAGE EXAMPLE (app/work/[slug]/page.tsx):
+  {project.codeSample && (
+    <CodeBlockReveal
+      code={project.codeSample.code}
+      language={project.codeSample.language}
+      highlightLines={project.codeSample.highlightLines}
+      showLineNumbers
+    />
+  )}
 */

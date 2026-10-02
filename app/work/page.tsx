@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { orderedProjects } from "@/lib/projects";
 import { statusLabel } from "@/lib/projects";
+import StaggerRevealContainer from "@/components/animations/StaggerRevealContainer";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { EvidenceList, RepoLink } from "@/components/work/Evidence";
 import { productionUrl } from "@/lib/site";
@@ -45,10 +46,9 @@ export default function WorkPage() {
           </p>
         </ScrollReveal>
 
-        <div className="space-y-20">
+        <StaggerRevealContainer className="space-y-20">
           {projects.map((project, i) => (
-            <ScrollReveal key={project.slug}>
-              <article className="border border-[#2A2E37] bg-[#101217]">
+            <article key={project.slug} className="border border-[#2A2E37] bg-[#101217]">
                 <div className="p-8 lg:p-12 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10 lg:gap-16">
                   <div>
                     <div className="flex items-center justify-between gap-4 mb-8">
@@ -134,9 +134,8 @@ export default function WorkPage() {
                   </aside>
                 </div>
               </article>
-            </ScrollReveal>
           ))}
-        </div>
+        </StaggerRevealContainer>
       </div>
     </div>
   );

@@ -1,12 +1,17 @@
 import Link from "next/link";
 import { orderedProjects, statusLabel, type Project } from "@/lib/projects";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import StaggerRevealContainer from "@/components/animations/StaggerRevealContainer";
 
 // Selected Work (P6.1) — a hierarchy of modules, not four identical cards:
 // 01 Hermes = featured panel (3px border, blue offset shadow)
 // 02/03   = standard panels (2px border)
 // 04      = compact strip (1px border)
 // Hover/focus: border -> sky blue, arrow shifts. Keyboard focus mirrors hover.
+// P6.2: the three blocks share ONE IntersectionObserver via
+// StaggerRevealContainer (client island) instead of three ScrollReveal
+// wrappers — panels enter 120ms apart; reduced-motion and no-JS users get
+// plain visible children (animation classes never apply).
 
 function SectionMarker({ index, label }: { index: number; label: string }) {
   return (
@@ -150,31 +155,25 @@ export default function SelectedWork() {
           </div>
         </ScrollReveal>
 
-        <div className="space-y-6">
-          <ScrollReveal>
-            <div className="group">
-              <FeaturePanel project={featured} />
-            </div>
-          </ScrollReveal>
+        <StaggerRevealContainer className="space-y-6" staggerDelay={120}>
+          <div className="group">
+            <FeaturePanel project={featured} />
+          </div>
 
-          <ScrollReveal>
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-              {rest
-                .filter((p) => p.level !== "compact")
-                .map((p) => (
-                  <StandardRow key={p.slug} project={p} index={p.index} />
-                ))}
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal>
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {rest
-              .filter((p) => p.level === "compact")
+              .filter((p) => p.level !== "compact")
               .map((p) => (
-                <CompactStrip key={p.slug} project={p} index={p.index} />
+                <StandardRow key={p.slug} project={p} index={p.index} />
               ))}
-          </ScrollReveal>
-        </div>
+          </div>
+
+          {rest
+            .filter((p) => p.level === "compact")
+            .map((p) => (
+              <CompactStrip key={p.slug} project={p} index={p.index} />
+            ))}
+        </StaggerRevealContainer>
       </div>
     </section>
   );

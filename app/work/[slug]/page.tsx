@@ -6,6 +6,8 @@ import { productionUrl } from "@/lib/site";
 import { projectJsonLd, breadcrumbJsonLd } from "@/lib/jsonld";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { EvidenceList, RepoLink } from "@/components/work/Evidence";
+import ArchitectureDiagram from "@/components/animations/ArchitectureNode";
+import CodeBlockReveal from "@/components/animations/CodeBlockReveal";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -160,23 +162,38 @@ export default async function WorkDetailPage({ params }: Props) {
             {project.architectureNodes && project.architectureNodes.length > 0 && (
               <ScrollReveal>
                 <CaseSection index="04" label="ARCHITECTURE">
-                  <div className="flex flex-col items-start gap-0 w-full max-w-sm">
-                    {project.architectureNodes.map((node, i) => (
-                      <div key={node.label} className="w-full">
-                        <div
-                          className={`arch-node w-full text-left ${
-                            node.highlight ? "border-[#63B3FF]/30" : ""
-                          }`}
-                        >
-                          <p className={`font-mono text-[11px] tracking-[0.1em] ${node.highlight ? "text-[#63B3FF]" : "text-[#9AA1AD]"}`}>
-                            {node.label}
-                          </p>
-                          {node.sublabel && <p className="meta-label mt-0.5">{node.sublabel}</p>}
-                        </div>
-                        {i < project.architectureNodes!.length - 1 && <div className="arch-arrow" aria-hidden="true" />}
-                      </div>
-                    ))}
-                  </div>
+                  <p className="text-sm text-[#9AA1AD] mb-6 leading-relaxed">
+                    Interactive blueprint — select any layer to inspect its
+                    responsibility and stack. Keyboard-navigable.
+                  </p>
+                  <ArchitectureDiagram
+                    nodes={project.architectureNodes.map((n, i) => ({
+                      id: `${project.slug}-arch-${i}`,
+                      label: n.label,
+                      sublabel: n.sublabel,
+                      highlight: n.highlight,
+                    }))}
+                    edges={[]}
+                    layout="vertical"
+                  />
+                </CaseSection>
+              </ScrollReveal>
+            )}
+
+            {project.codeSample && (
+              <ScrollReveal>
+                <CaseSection index="04B" label="CORE IMPLEMENTATION">
+                  {project.codeSample.caption && (
+                    <p className="meta-label mb-3 text-[#63B3FF]">
+                      {project.codeSample.caption}
+                    </p>
+                  )}
+                  <CodeBlockReveal
+                    code={project.codeSample.code}
+                    language={project.codeSample.language ?? "typescript"}
+                    highlightLines={project.codeSample.highlightLines}
+                    showLineNumbers
+                  />
                 </CaseSection>
               </ScrollReveal>
             )}

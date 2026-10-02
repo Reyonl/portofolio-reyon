@@ -3,7 +3,8 @@ import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
-import ScrollProgress from "@/components/ui/ScrollProgress";
+import ScrollProgressBar from "@/components/animations/ScrollProgressBar";
+import AmbientBackground from "@/components/animations/AmbientBackground";
 import { productionUrl } from "@/lib/site";
 import { websiteJsonLd } from "@/lib/jsonld";
 import { profile } from "@/content/profile";
@@ -86,8 +87,9 @@ export default function RootLayout({
             __html: JSON.stringify(websiteJsonLd()),
           }}
         />
+        <AmbientBackground intensity={0.35} speed={0.8} disableOnMobile />
         <Nav />
-        <ScrollProgress />
+        <ScrollProgressBar height={3} gradient glowEffect />
         <main id="main">{children}</main>
         <Footer />
       </body>

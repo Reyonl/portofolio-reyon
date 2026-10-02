@@ -142,4 +142,33 @@ export const hermesDevops: Project = {
     "The portfolio metadata artifact (schema v1) cannot yet carry test counts or release tags — exactly the evidence a portfolio needs. Schema v2 should emit an evidence block, closing the loop the other half of this site assumes exists.",
     "The dashboard and serve commands read real state, but there is no cross-machine story yet; the registry is a single-user design and I'd rather say so than paper over it.",
   ],
+  codeSample: {
+    language: "typescript",
+    caption: "src/core/safety.ts — Safety gate from hermes-devops v0.7.5 (verbatim)",
+    highlightLines: [8, 12],
+    code: `export async function gateOperation(
+  cfg: HermesDevOpsConfig,
+  opts: GateOptions
+): Promise<GateDecision> {
+  const { operation } = opts;
+
+  // --no defeats every auto-approve; contradictions are rejected, not guessed.
+  if (opts.no && (operation.safety === 'REVIEW' || operation.safety === 'DANGEROUS')) {
+    if (opts.yes || opts.force || envFlag('HERMES_DEVOPS_YES')) {
+      throw HermesError.policyBlocked(operation.id,
+        '--no was supplied together with an auto-confirm flag');
+    }
+    if (!isInteractive()) throw new HermesError({ code: 'E_CONFIRMATION_REQUIRED' });
+    const ok = await askConfirm("Proceed with " + operation.description + "?");
+    if (!ok) throw confirmationDenied(operation.id);
+    return { approved: true, approval: 'interactive-confirm', skippedPrompt: false };
+  }
+
+  switch (operation.safety) {
+    case 'SAFE':      return { approved: true, approval: 'safe', skippedPrompt: true };
+    case 'REVIEW':    return gateReview(cfg, opts);
+    case 'DANGEROUS': return gateDangerous(cfg, opts);
+  }
+}`,
+  },
 };

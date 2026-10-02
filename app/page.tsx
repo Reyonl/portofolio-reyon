@@ -3,6 +3,7 @@ import { profilePageJsonLd } from "@/lib/jsonld";
 import SelectedWork from "@/components/home/SelectedWork";
 import FlagshipStory from "@/components/home/FlagshipStory";
 import HowIWork from "@/components/home/HowIWork";
+import TrustIndicators from "@/components/home/TrustIndicators";
 import Background from "@/components/home/Background";
 import Contact from "@/components/home/Contact";
 
@@ -22,6 +23,7 @@ export default function HomePage() {
       <SelectedWork />
       <FlagshipStory />
       <HowIWork />
+      <TrustIndicators />
       <Background />
       <Contact />
     </>

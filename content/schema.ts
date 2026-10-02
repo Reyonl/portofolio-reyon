@@ -95,6 +95,13 @@ export interface Project {
   context?: string;
   constraints?: string[];
   architectureNodes?: ArchitectureNode[];
+  /** Optional verifiable code snippet displayed on flagship case studies. */
+  codeSample?: {
+    code: string;
+    language?: string;
+    caption?: string;
+    highlightLines?: number[];
+  };
   decisions?: DecisionBlock[];
   challenges?: ChallengeBlock[];
   testing?: string;

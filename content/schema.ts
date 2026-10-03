@@ -69,6 +69,19 @@ export interface ArchitectureNode {
   highlight?: boolean;
 }
 
+/** Project screenshot. Honesty contract: the file must live under /images/
+ *  (we ship only real captures of this system), and `alt` is REQUIRED —
+ *  validation fails the build on an empty or placeholder alt. */
+export interface ProjectMedia {
+  src: string;
+  alt: string;
+  /** Optional caption shown under the frame, e.g. provenance of the capture. */
+  caption?: string;
+  /** Natural pixel size of the captured file (prevents CLS; validate against it). */
+  width: number;
+  height: number;
+}
+
 export interface Project {
   slug: string;
   /** Display order on /work and the homepage (1-based, unique). */
@@ -88,6 +101,8 @@ export interface Project {
   evidence: EvidenceItem[];
   links: ProjectLinks;
   featured: boolean;
+  /** Real screenshots of this system (validated: /images/ only, alt required). */
+  media?: ProjectMedia[];
 
   // Case study body (flagship + standard render these; compact renders overview+challenge only).
   overview?: string;
@@ -146,5 +161,16 @@ export function validateProject(p: Project): string[] {
 
   if ((p.level === "flagship" || p.level === "standard") && !p.overview)
     errors.push(`${p.slug}: ${p.level} case study requires overview`);
+
+  for (const m of p.media ?? []) {
+    if (!/^\/images\/[\w.-]+\.jpg$/.test(m.src))
+      errors.push(`${p.slug} / media "${m.src}": must be a real capture under /images/ (*.jpg)`);
+    if (!m.alt || m.alt.trim().length < 12)
+      errors.push(`${p.slug} / media "${m.src}": alt text missing or too short`);
+    if (/\b(image|photo|screenshot) of (it|something)\b/i.test(m.alt) || /^(img|placeholder|test)\b/i.test(m.alt.trim()))
+      errors.push(`${p.slug} / media "${m.src}": alt looks like a placeholder`);
+    if (m.width <= 0 || m.height <= 0)
+      errors.push(`${p.slug} / media "${m.src}": natural width/height required (CLS gate)`);
+  }
   return errors;
 }

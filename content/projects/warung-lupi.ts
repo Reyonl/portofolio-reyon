@@ -101,6 +101,36 @@ export const warungLupiWeb: Project = {
   level: "compact",
   featured: false,
   stack: ["Laravel 13", "PHP 8.3", "MySQL", "React"],
+  media: [
+    {
+      src: "/images/warung-dashboard.jpg",
+      alt: "Warung Lupi dashboard: sidebar navigation, greeting with date, sales summary for the day with transaction count and remaining debt, quick-action buttons, and a recent transactions table with status badges.",
+      caption: "Local development instance — dashboard with the shop's own data.",
+      width: 1440,
+      height: 620,
+    },
+    {
+      src: "/images/warung-rokok.jpg",
+      alt: "Warung Lupi cigarette report: date filter controls, total sales with units sold and outstanding debt, a sales-per-item table on the left, and per-receipt breakdown on the right.",
+      caption: "Laporan Rokok — the reporting surface of the shared API.",
+      width: 1440,
+      height: 900,
+    },
+    {
+      src: "/images/warung-bon.jpg",
+      alt: "Warung Lupi bill history: search and date-range filters above a table of credit slips with invoice number, customer, date, amount, and payment status badges.",
+      caption: "Riwayat Bon — credit-slip records the shop tracks daily.",
+      width: 1440,
+      height: 760,
+    },
+    {
+      src: "/images/warung-pelanggan.jpg",
+      alt: "Warung Lupi customer management screen with the shop's customer directory.",
+      caption: "Manajemen Pelanggan.",
+      width: 1440,
+      height: 760,
+    },
+  ],
   links: {
     repo: "https://github.com/Reyonl/rekapan_bukunota",
     repoVisibility: "public",

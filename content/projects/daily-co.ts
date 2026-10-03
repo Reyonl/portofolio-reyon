@@ -14,6 +14,15 @@ export const dailyCo: Project = {
   level: "standard",
   featured: false,
   stack: ["Laravel 12", "Livewire 4", "Tailwind CSS 4", "Fabric.js", "MySQL"],
+  media: [
+    {
+      src: "/images/dailyco-hero.jpg",
+      alt: "DAILY.CO landing page hero: badge, bold Indonesian headline with red gradient accent on 'Canvas Interaktif', and two call-to-action buttons over a pastel gradient mesh background.",
+      caption: "Local development instance of the DAILY.CO customer landing page.",
+      width: 1440,
+      height: 860,
+    },
+  ],
   links: {
     repo: "https://github.com/Reyonl/project_TA",
     repoVisibility: "public",

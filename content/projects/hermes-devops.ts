@@ -14,6 +14,15 @@ export const hermesDevops: Project = {
   level: "flagship",
   featured: true,
   stack: ["TypeScript", "Node.js", "GitHub Actions", "Git", "gh CLI"],
+  media: [
+    {
+      src: "/images/hermes-terminal.jpg",
+      alt: "Terminal window showing the real hermes-devops status output: CLI ready at v0.7.5, sixteen registered projects, health counts, system tool checks, and GitHub connection state.",
+      caption: "hermes-devops status — actual output on the developer machine (v0.7.5).",
+      width: 1412,
+      height: 564,
+    },
+  ],
   links: {
     // Repository exists but is currently PRIVATE. Until publication is approved,
     // no public repo link is rendered — the UI must state "private repository".

@@ -1,16 +1,9 @@
 import { chromium } from 'playwright';
-const raw = process.env.HERMES_STATUS_TXT;
-const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-const body = raw.split('\n').map(l => {
-    let s = esc(l);
-    if (/^─/.test(l)) return `<span class="mut">${s}</span>`;
-    if (/^(CLI|PROJECTS|HEALTH|SYSTEM|GITHUB)$/.test(l.trim())) return `<span class="hl">${s}</span>`;
-    if (/Registered|^Status/.test(l)) s = s.replace('16','<span class="hl">16</span>').replace('READY','<span class="ok">READY</span>');
-    if (/✓/.test(l)) s = s.replace(/(✓)/g, '<span class="ok">$1</span>');
-    if (/✗/.test(l)) s = s.replace(/✗/g, '<span class="bad">✗</span>');
-    if (/Attention/.test(l)) s = s.replace(/(Attention\s+\d+)/, '<span class="warn">$1</span>');
-    return s;
-}).join('\n');
+// NOTE: this script re-typesets the captured `hermes-devops status` output as a
+// full-bleed terminal window (no fake chrome beyond the neutral title bar).
+// The data columns below are transcribed 1:1 from real
+// `node bin/hermes-devops.js status` output on v0.7.5 (2026-10-03); refresh
+// them from a live run whenever the version line in the image goes stale.
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>
   body{margin:0;background:#0B0C10;font-family:Consolas,'JetBrains Mono',monospace}
   .win{margin:14px;border:1px solid #2A2E37;border-radius:10px;overflow:hidden;background:#0B0C10}

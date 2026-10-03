@@ -4,6 +4,7 @@ import { orderedProjects } from "@/lib/projects";
 import { statusLabel } from "@/lib/projects";
 import StaggerRevealContainer from "@/components/animations/StaggerRevealContainer";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import WorkFrame from "@/components/ui/ProjectMedia";
 import { EvidenceList, RepoLink } from "@/components/work/Evidence";
 import { productionUrl } from "@/lib/site";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
@@ -93,6 +94,13 @@ export default function WorkPage() {
                       </Link>
                       <RepoLink project={project} />
                     </div>
+
+                    {/* First real capture, if the registry carries one */}
+                    {project.media && project.media.length > 0 && (
+                      <div className="mt-10">
+                        <WorkFrame item={project.media[0]} className="max-w-3xl" />
+                      </div>
+                    )}
                   </div>
 
                   <aside className="space-y-8 border-t lg:border-t-0 lg:border-l border-[#2A2E37] pt-8 lg:pt-2 lg:pl-10">

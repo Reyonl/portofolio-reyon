@@ -2,6 +2,7 @@ import Link from "next/link";
 import { orderedProjects, statusLabel, type Project } from "@/lib/projects";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import StaggerRevealContainer from "@/components/animations/StaggerRevealContainer";
+import WorkFrame from "@/components/ui/ProjectMedia";
 
 // Selected Work (P6.1) — a hierarchy of modules, not four identical cards:
 // 01 Hermes = featured panel (3px border, blue offset shadow)
@@ -98,6 +99,11 @@ function StandardRow({ project, index }: { project: Project; index: number }) {
           </h3>
           <p className="mt-2.5 text-[#9AA1AD] leading-relaxed max-w-2xl text-sm">{project.tagline}</p>
           <p className="meta-label mt-4">{project.category.toUpperCase()} · {project.period}</p>
+          {project.media && project.media.length > 0 && (
+            <div className="mt-6">
+              <WorkFrame item={project.media[0]} />
+            </div>
+          )}
         </div>
         <div className="md:pt-1 flex md:flex-col gap-x-6 gap-y-3 md:gap-2">
           <Proof project={project} />
@@ -158,6 +164,11 @@ export default function SelectedWork() {
         <StaggerRevealContainer className="space-y-6" staggerDelay={120}>
           <div className="group">
             <FeaturePanel project={featured} />
+            {featured.media && featured.media.length > 0 && (
+              <div className="mt-4">
+                <WorkFrame item={featured.media[0]} priority />
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">

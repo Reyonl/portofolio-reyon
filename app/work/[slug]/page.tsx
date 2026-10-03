@@ -6,6 +6,7 @@ import { productionUrl } from "@/lib/site";
 import { projectJsonLd, breadcrumbJsonLd } from "@/lib/jsonld";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { EvidenceList, RepoLink } from "@/components/work/Evidence";
+import WorkFrame from "@/components/ui/ProjectMedia";
 import ArchitectureDiagram from "@/components/animations/ArchitectureNode";
 import CodeBlockReveal from "@/components/animations/CodeBlockReveal";
 
@@ -102,8 +103,24 @@ export default async function WorkDetailPage({ params }: Props) {
           </p>
         </ScrollReveal>
 
+        {/* In-action captures (registry-driven; omitted when a project has none) */}
+        {project.media && project.media.length > 0 && (
+          <ScrollReveal delay={0.05}>
+            <div className="mt-14">
+              <WorkFrame item={project.media[0]} priority className="border-2" />
+              {project.media.length > 1 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  {project.media.slice(1).map((m) => (
+                    <WorkFrame key={m.src} item={m} />
+                  ))}
+                </div>
+              )}
+            </div>
+          </ScrollReveal>
+        )}
+
         {/* Facts strip */}
-        <ScrollReveal delay={0.05}>
+        <ScrollReveal delay={project.media?.length ? 0.1 : 0.05}>
           <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#2A2E37] border-y border-[#2A2E37]">
             {[
               { label: "CATEGORY", value: project.category },
